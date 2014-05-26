@@ -1,0 +1,10 @@
+{
+  "name" : "SDIServer",
+  "version" : "0.0.1",
+  "description" : "Server für SDI",
+
+  "dependencies" : { 
+  	"orm" : "",
+  	"restify" : ""
+  }
+}
