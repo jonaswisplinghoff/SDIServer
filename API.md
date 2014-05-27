@@ -10,30 +10,35 @@ API für den Server des Infosystems der THM im Rahmen des Faches _Sprachdialogsy
 - [Add Report: Start Call](#add-report-start-call)
   - [Target](#target)
   - [Parameters](#parameters)
+  - [Request](#request)
   - [Response](#response)
     - [Erfolgreich Eintrag angelegt und bekannte ANI](#erfolgreich-eintrag-angelegt-und-bekannte-ani)
     - [Fehlende oder fehlerhafte Parameter](#fehlende-oder-fehlerhafte-parameter)
 - [Add Report: Menu Choice](#add-report-menu-choice)
   - [Target](#target-1)
   - [Parameters](#parameters-1)
+  - [Request](#request-1)
   - [Response](#response-1)
     - [Erfolgreich angelegt](#erfolgreich-angelegt)
     - [Fehlende oder fehlerhafte Parameter](#fehlende-oder-fehlerhafte-parameter-1)
 - [Add Report: End Call](#add-report-end-call)
   - [Target](#target-2)
   - [Parameters](#parameters-2)
+  - [Request](#request-2)
   - [Response](#response-2)
     - [Erfolgreich angelegt](#erfolgreich-angelegt-1)
     - [Fehlende oder fehlerhafte Parameter](#fehlende-oder-fehlerhafte-parameter-2)
 - [Check Matrikelnummer](#check-matrikelnummer)
   - [Target](#target-3)
   - [Parameters](#parameters-3)
+  - [Request](#request-3)
   - [Response](#response-3)
     - [Matrikelnummer gefunden](#matrikelnummer-gefunden)
     - [Matrikelnummer nicht gefunden](#matrikelnummer-nicht-gefunden)
 - [ClassInfo](#classinfo)
   - [Target](#target-4)
   - [Parameters](#parameters-4)
+  - [Request](#request-4)
   - [Response](#response-4)
     - [Kurs gefunden](#kurs-gefunden)
     - [Kurs nicht gefunden](#kurs-nicht-gefunden)
@@ -53,8 +58,12 @@ Erstelle Logeintrag für Event: Start Call
 | Name    | Type         | Description|
 | ------------- |:-------------:| -----:|
 | callId      | string | **Required** ID of the Call |
-| timestamp | string | **Required** Timestamp of the Report |
+| timestamp | string | **Required** Timestamp of the Report in the format "YYYY-MM-DDTHH:mm:ss" |
 | ani      | string  | **Required** ANI of the Call |
+
+### Request
+
+`curl -X POST "http://0.0.0.0:8080/reports/start?callId=123&timestamp=2014-05-27T12:15:11&ani=0800111111"`
 
 ### Response
 
@@ -92,6 +101,10 @@ Erstelle Logeintrag für Menüauswahl-Event:
 | timestamp | string | **Required** Timestamp of the Report |
 | choice | string  | **Required** Menu-Choice |
 
+### Request
+
+`curl -X POST "http://0.0.0.0:8080/reports/menu?callId=123&timestamp=2014-05-27T12:15:11&choice=asd"`
+
 ### Response
 
 #### Erfolgreich angelegt
@@ -125,6 +138,10 @@ Erstelle Logeintrag für End-Call-Event:
 | callId      | string | **Required**. ID of the Call |
 | timestamp | string | **Required** Timestamp of the Report |
 
+### Request
+
+`curl -X POST "http://0.0.0.0:8080/reports/end?callId=123&timestamp=2014-05-27T12:15:11"`
+
 ### Response
 
 #### Erfolgreich angelegt
@@ -157,6 +174,10 @@ Prüfe Matrikelnummer auf Gültigkeit und gebe Name zurück.
 | ------------- |:-------------:| -----:|
 | callId      | string | **Required**. ID of the Call |
 | matrikelnummer | string | **Required**. Matrikelnummer of the User |
+
+### Request
+
+`curl -X GET "http://0.0.0.0:8080/matrikelnummer?callId=123&matrikelnummer=123456"`
 
 ### Response
 
@@ -192,6 +213,10 @@ Gebe Informationen zu Kurs anhand von KursID.
 | ------------- |:-------------:| -----:|
 | callId      | string | **Required**. ID of the Call |
 | classId | string | **Required**. ID of the class |
+
+### Request
+
+`curl -X GET "http://0.0.0.0:8080/class?callId=123&classId=MM14"`
 
 ### Response
 
