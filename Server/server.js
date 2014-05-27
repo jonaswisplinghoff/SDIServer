@@ -97,6 +97,8 @@ db.drop(function(){
 
 // !REQUEST HANDLER
 
+// TODO: check incoming timestamps for valid format 
+
 server.post('/reports/start', function (req, res, next) {
    console.log('POST /reports/start callId: ' + req.params.callId + ' timestamp: ' + req.params.timestamp + ' ani: ' + req.params.ani);
 
