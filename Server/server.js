@@ -2,78 +2,183 @@ var restify = require('restify');
 var orm = require("orm"); 
 
 var server = restify.createServer();
-server.use(restify.queryParser());
-server.use(restify.bodyParser({mapParams: true}));
+	server.use(restify.queryParser());
+	server.use(restify.bodyParser({mapParams: true}));
 
-var db = orm.connect({
-    host     : "localhost",
-    database : "sdi",
-    user     : "root",
-    password : "root",
-    protocol : "mysql",
-    socketPath: '/var/run/mysqld/mysqld.sock',
-    port     : "8889",
-    query    : {
-    pool: true,
-    debug: true
+var db = orm.connect("mysql://root:root@localhost:3306/sdi");
+
+db.on("connect", function (err) {
+    if (err) {
+        console.log("Something is wrong with the connection", err);
+        return;
     }
+
+    console.log("Database connected!");
+    
 });
 
+// !MODELS
 
+var Student = db.define('student', {
+  id      : { type: "serial", key: true },
+  name    : String,
+  surname : String,
+  matrikelnummer: {type: "text", unique: true},
+  ani: {type: "text", unique: true}
+}, {
+  methods : {
+    getFullName: function () {
+      return this.name + " " + this.surname;
+    }
+  }
+});
+
+var Course = db.define('course', {
+	id		:{type: "serial", key: true},
+	classId	: String,
+	classTitle: String,
+	classDescription: { type: "text" }
+}, {
+  methods:{
+	getClassId: function (){
+		return this.classId;
+	},
+	getClassTitle: function() {
+		return this.classTitle;
+	},
+	getClassDescription: function() {
+		return this.classDescription;
+	}
+  }
+});
+
+var Log = db.define('log', {
+	id		: {type: "serial", key: true},
+	callId	: { type: "number"},
+	timestamp: { type: "date", time: true },
+	event: { type: "enum", values: [ "start", "menu", "end" ] },
+	choice: String
+}, {
+	methods:{
+		
+	}
+});
+
+// !SETUP DATABASE
+
+db.drop(function(){
+	Student.sync(function(){
+		var newStudent ={};
+		newStudent.name = "Max";
+		newStudent.surname = "Mustermann";
+		newStudent.matrikelnummer = "123456";
+		newStudent.ani = "0800111111";
+		Student.create(newStudent, function(err, results){
+			if (err) {
+		    	console.log("Something is wrong with the student creation", err);
+		    	return;
+			}
+		});
+	});
+	Course.sync(function(){
+		var newCourse = {};
+		newCourse.classId = "MM14";
+		newCourse.classTitle = "Konzeption von Sprachdialogsystemen und Realisierung von Sprachportalen";
+		newCourse.classDescription = "Vorlesung: Architektur und Komponenten von Voice Plattformen (Voice Engines und Prozesse), Konzeptionierung eines Voice-User-Interfaces (Dialogstrukturen, Prompting und Persona Design), Dialog Implementierung (VoiceXML, Grammatikerstellung, Audioaufbereitung) Konzeption und Aufbau eines Sprachportals, Dynamische Dialoge mit Content aus Datenbank, Planung und Management von Sprachprojekten Ausblick auf multimodale Interaktionssysteme. Praktikum: Programmierung eines Sprachdialogs in VoiceXML; Realisierung eines Sprachportals mit dynamischen Content aus Datenbank.";
+		Course.create(newCourse, function(err, results){
+			if (err) {
+		    	console.log("Something is wrong with the course creation", err);
+		    	return;
+			}
+		});
+	});
+    Log.sync(function(){});
+}); 
+
+// !REQUEST HANDLER
 
 server.post('/reports/start', function (req, res, next) {
-   console.log('log startcall');
-   console.log('id: ' + req.params.callId);
-   console.log('timestamp: ' + req.params.timestamp);
-   console.log('ani: ' + req.params.ani);
+   console.log('POST /reports/start callId: ' + req.params.callId + ' timestamp: ' + req.params.timestamp + ' ani: ' + req.params.ani);
 
    if(typeof req.params.callId != "undefined" && 
    		typeof req.params.timestamp != "undefined" && 
    		typeof req.params.ani != "undefined"){	
 
-   		if(req.params.ani === "12345"){
+	   	var newLog = {};
+	   	newLog.callId = req.params.callId;
+	   	newLog.timestamp = req.params.timestamp;
+	   	newLog.event = "start";
+	   	Log.create(newLog, function(err, results) {
+			if (err) {
+		    	console.log("Something is wrong with the log creation", err);
+		    	return;
+			}
+		});
 
-   			res.send('{"status": "ok", "name": "Max Mustermann"}');
-	   	}
+		Student.find({ani:req.params.ani}, function(err, persons){
+			if (err) {
+		    	console.log("Something is wrong with the connection", err);
+		    	return;
+			}
+			if(persons.length == 1){
+				res.send('{"status": "ok", "name": "' + persons[0].getFullName() + '"}');
+			}
+			else{
+				res.send('{"status": "ok", "name": ""}');
+			}
+		});
    }
    else{
-	   		res.send('{"status": "not_ok", "name": ""}');
+	   	res.send('{"status": "not_ok", "name": ""}');
    }
    
    next();
 });
 
 server.post('/reports/menu', function (req, res, next) {
-   console.log('log menuchoice');
-   console.log('id: ' + req.params.callId);
-   console.log('timestamp: ' + req.params.timestamp);
-   console.log('choice: ' + req.params.choice);
+   console.log('POST /reports/menu callId: ' + req.params.callId + ' timestamp: ' + req.params.timestamp + ' choice: ' + req.params.choice);
 
    if(typeof req.params.callId != "undefined" && 
    		typeof req.params.timestamp != "undefined" && 
    		typeof req.params.choice != "undefined"){	
    		
-   			//TODO: If erfolgreich angelegt
-   			res.send('{"status": "ok"}');
+   		var newLog = {};
+	   	newLog.callId = req.params.callId;
+	   	newLog.timestamp = req.params.timestamp;
+	   	newLog.event = "menu";
+	   	newLog.choice = req.params.choice;
+	   	Log.create(newLog, function(err, results) {
+			if (err) {
+		    	console.log("Something is wrong with the log creation", err);
+		    	return;
+			}
+		});
+   		res.send('{"status": "ok"}');
    }
    else{
-	   		res.send('{"status": "not_ok"}');
+	   	res.send('{"status": "not_ok"}');
    }
    
    next();
 });
 
 server.post('/reports/end', function (req, res, next) {
-   console.log('log end');
-   console.log('id: ' + req.params.callId);
-   console.log('timestamp: ' + req.params.timestamp);
+   console.log('POST /reports/end callId: ' + req.params.callId + ' timestamp: ' + req.params.timestamp);
 
    if(typeof req.params.callId != "undefined" && 
    		typeof req.params.timestamp != "undefined"){	
 	   		
-	   		//TODO: If erfolgreich angelegt
-   			res.send('{"status": "ok"}');
-	   	
+	   		var newLog = {};
+		   	newLog.callId = req.params.callId;
+		   	newLog.timestamp = req.params.timestamp;
+		   	newLog.event = "end";
+		   	Log.create(newLog, function(err, results) {
+				if (err) {
+			    	console.log("Something is wrong with the log creation", err);
+			    	return;
+				}
+			});
+   			res.send('{"status": "ok"}');   	
    }
    else{
 	   		res.send('{"status": "not_ok"}');
@@ -83,38 +188,47 @@ server.post('/reports/end', function (req, res, next) {
 });
 
 server.get('/matrikelnummer', function (req, res, next) {
-   console.log('log matrikelnummer');
-   console.log('id: ' + req.params.callId);
-   console.log('matrikelnummer: ' + req.params.matrikelnummer);
+   console.log('GET /matrikelnummer id: ' + req.params.callId + 'matrikelnummer: ' + req.params.matrikelnummer);
 
    if(typeof req.params.callId != "undefined" && 
    		typeof req.params.matrikelnummer != "undefined"){	
 
-   		if(req.params.matrikelnummer === "12345"){
-   			res.send('{"status": "ok", "name": "Max Mustermann"}');
-	   	}
-	   	else{
-		   	res.send('{"status": "not_ok", "name": ""}');
-	   	}
+	   	Student.find({matrikelnummer: req.params.matrikelnummer}, function(err, persons){
+			if (err) {
+		    	console.log("Something is wrong with the connection", err);
+		    	return;
+			}
+			if(persons.length == 1){
+				res.send('{"status": "ok", "name": "' + persons[0].getFullName() + '"}');
+			}
+			else{
+				res.send('{"status": "not_ok", "name": ""}');
+			}
+		});
    }
    else{
-	   		res.send('{"status": "not_ok", "name": ""}');
+	   res.send('{"status": "not_ok", "name": ""}');
    }
    
    next();});
 
 server.get('/class', function (req, res, next) {
-   console.log('log class');
-   console.log('id: ' + req.params.callId);
-   console.log('matrikelnummer: ' + req.params.classId);
+   console.log('GET /class callId: ' + req.params.callId + ' classId: ' + req.params.classId);
 
    if(typeof req.params.callId != "undefined" && typeof req.params.classId != "undefined"){	
-	   	if(req.params.classId === "123"){
-	   		res.send('{"classId": "MM14", "classTitle": "Konzeption von Sprachdialogsystemen und Realisierung von Sprachportalen", "description": "Vorlesung: Architektur und Komponenten von Voice Plattformen (Voice Engines und Prozesse), Konzeptionierung eines Voice-User-Interfaces (Dialogstrukturen, Prompting und Persona Design), Dialog Implementierung (VoiceXML, Grammatikerstellung, Audioaufbereitung) Konzeption und Aufbau eines Sprachportals, Dynamische Dialoge mit Content aus Datenbank, Planung und Management von Sprachprojekten Ausblick auf multimodale Interaktionssysteme. Praktikum: Programmierung eines Sprachdialogs in VoiceXML; Realisierung eines Sprachportals mit dynamischen Content aus Datenbank."}')
-	   	}
-	   	else{
-		   	res.send('{"status": "not_ok", "classId": "", "classTitle": "", "description": ""}');
-	   	}
+   
+   		Course.find({classId: req.params.classId}, function(err, classes){
+	   		if (err) {
+		    	console.log("Something is wrong with the connection", err);
+		    	return;
+			}
+	   		if(classes.length == 1){
+	   			res.send('{"status":"ok","classId":"'+classes[0].getClassId()+'", "classTitle": "'+classes[0].getClassTitle()+'", "description": "'+classes[0].getClassDescription()+'"}');
+	   		}
+	   		else{
+			   	res.send('{"status": "not_ok", "classId": "", "classTitle": "", "description":""}');
+		   	}
+   		});
    }
    else{
    		res.send('{"status": "not_ok", "classId": "", "classTitle": "", "description": ""}');
