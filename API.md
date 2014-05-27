@@ -1,5 +1,5 @@
 # Sprachdialogsysteme API Documentation
-Stand: 19. Mai 2014
+Stand: 26. Mai 2014
 
 API für den Server des Infosystems der THM im Rahmen des Faches _Sprachdialogsysteme_ im Sommersemester 2014 an der Technischen Hochschule Mittelhessen.
 
