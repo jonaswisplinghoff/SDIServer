@@ -1,0 +1,7 @@
+Oeffnungszeiten:public (Wahl:w){<oeffnungszeiten $w>}
+
+FB [ friedberg ] { return ("fb")}
+GI [ giessen ] { return ("gi")}
+WZ [ wetzlar ] { return ("wz")}
+
+Wahl [ FB GI WZ ] { return ($return) }

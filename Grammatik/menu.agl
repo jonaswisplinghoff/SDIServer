@@ -1,0 +1,6 @@
+Auswahl:public (Wahl:w){<chichu $w>}
+
+Wahl  [
+        kurs      {return ("kurs")}
+        infos      {return ("allgemein")}
+				]

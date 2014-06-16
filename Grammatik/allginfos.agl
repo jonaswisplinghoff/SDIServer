@@ -1,0 +1,10 @@
+Allginfos:public (Wahl:w){<allginfos $w>}
+
+Wahl  [
+        sekretariat      {return ("Sekretariat")}
+        oeffnungszeiten		{ return ("Oeffnungszeiten") }
+				vorlesungszeiten {return ("Vorlesungszeiten") }
+				bibliothek					{ return ("Bibliothek") }
+				mensa							{ return ("Mensa") }
+				sport							{ return ("Sport") }
+				]

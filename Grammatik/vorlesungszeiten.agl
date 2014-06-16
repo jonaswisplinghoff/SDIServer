@@ -1,0 +1,10 @@
+Vorlesungszeiten:public (Wahl:w){<vorlesungszeiten $w>}
+				
+Wahl ( Semester:s Jahr:j ) {return (strcat($s $j)))}
+
+Ws [ wintersemester ws ] { return ("ws")}
+Ss [ sommersemester ss ] { return ("ss")}
+
+Jahr [ 14 2014 ] { return ("14")}
+
+Semester [ Ws Ss ] { return ($return)}
