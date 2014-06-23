@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<vxml xmlns=http://www.w3.org/2001/vxml
+<vxml xmlns="http://www.w3.org/2001/vxml"
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 xsi:schemaLocation="http://www.w3.org/2001/vxml http://www.w3.org/TR/voicexml21/vxml.xsd"
 version="2.1" xml:lang="de-DE">
@@ -8,7 +8,7 @@ version="2.1" xml:lang="de-DE">
 		
 			<form id="libraryMultislots">
 				<field name="LibraryTimes">
-					<grammar src="../Grammar/libraryTimes.gsl#LIBRARY" type="application/x-nuance-gsl"/>
+					<grammar src="Grammar/libraryTimes.gsl#LIBRARY" type="application/x-nuance-gsl"/>
 					<prompt>
 						Bitte, wähle ein THM Standort.
 					</prompt>

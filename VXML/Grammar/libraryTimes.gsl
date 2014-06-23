@@ -1,5 +1,5 @@
 LIBRARY:public
-(?(der Standort der Bücherei ist)
+(?(der standort der bücherei ist)
 [
 (giessen ?(gi))
 { <location „Giessen"> <openingTimes "von 8:00 Uhr bis 20:30 Uhr"> }

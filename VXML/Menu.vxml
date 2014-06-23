@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<vxml xmlns=http://www.w3.org/2001/vxml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3.org/2001/vxml http://www.w3.org/TR/voicexml21/vxml.xsd" version="2.1" xml:lang="de-DE">
+<vxml xmlns="http://www.w3.org/2001/vxml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3.org/2001/vxml http://www.w3.org/TR/voicexml21/vxml.xsd" version="2.1" xml:lang="de-DE">
+	
 	<var name="gParticipantPhone" />
 	<var name="gCallerPhone" />
+	
 	<!-- **************************************************************************** -->
 		<property name="bargein" value="true"/>
-		<property name="confidencelevel" value="0.5" / -->
+		<property name="confidencelevel" value="0.5" />
 			<menu id="menu">
 				<prompt bargein="true">
 					Quelle Text Hauptmenü 
@@ -30,7 +32,7 @@
 					<prompt>
 						<audio src="... " />THM Öffnungszeiten: 
 					</prompt>
-					<goto next=„thmOpeningTimesTopic.vxml"/>
+					<goto next="thmOpeningTimesTopic.vxml"/>
 				</block>
 			</form>
 			<form id="choice2">
@@ -67,4 +69,4 @@
 					<disconnect/>
 				</block>
 			</form>
-		</vxml
+		</vxml>
