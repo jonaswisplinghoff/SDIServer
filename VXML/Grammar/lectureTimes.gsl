@@ -1,0 +1,11 @@
+LECTURE_TIMES:public
+(?(der standort der kantine ist)
+[
+(erstes ?(er))
+{ <semester "Erstes"> <vorlesungszeiten "von 8:00 Uhr bis 20:30 Uhr"> }
+(zweites ?(zw))
+{ <semester "Zweites"> <vorlesungszeiten "von 8:00 Uhr bis 20:30 Uhr"> }
+(drittes ?(dr))
+{ <semester "Drittes"> <vorlesungszeiten "von 8:00 Uhr bis 20:30 Uhr"> }
+]
+)
