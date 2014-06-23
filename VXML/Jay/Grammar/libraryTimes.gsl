@@ -1,0 +1,11 @@
+LIBRARY:public
+(?(der Standort der Bücherei ist)
+[
+(giessen ?(gi))
+{ <location „Giessen"> <openingTimes "von 8:00 Uhr bis 20:30 Uhr"> }
+(friedberg ? (fb))
+{ <location „Friedberg"> <openingTimes "von 8:00 Uhr bis 20:30 Uhr"> }
+(wetzlar?(we))
+{ <location „Wetzlar"> <openingTimes "von 8:00 Uhr bis 20:30 Uhr"> }
+]
+)

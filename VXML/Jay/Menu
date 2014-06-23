@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<vxml xmlns=http://www.w3.org/2001/vxml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3.org/2001/vxml http://www.w3.org/TR/voicexml21/vxml.xsd" version="2.1" xml:lang="de-DE">
+	<var name="gParticipantPhone" />
+	<var name="gCallerPhone" />
+	<!-- **************************************************************************** -->
+		<property name="bargein" value="true"/>
+		<property name="confidencelevel" value="0.5" / -->
+			<menu id="menu">
+				<prompt bargein="true">
+					Quelle Text Hauptmenü 
+				</prompt>
+				<choice dtmf="1" next="#choice1">
+					Öffnungszeiten der THM 
+				</choice>
+				<choice dtmf="2" next="#choice2">
+					Vorlesungszeiten 
+				</choice>
+				<choice dtmf="3" next="#choice3">
+					Öffnungszeiten der Bibliothek 
+				</choice>
+				<choice dtmf="4" next="#choice4">
+					Mensa Öffnungszeiten 
+				</choice>
+				<choice dtmf="5" next="#choice5">
+					Information zum THM Sport 
+				</choice>
+			</menu>
+			<form id="choice1">
+				<block>
+					<prompt>
+						<audio src="... " />THM Öffnungszeiten: 
+					</prompt>
+					<goto next=„thmOpeningTimesTopic.vxml"/>
+				</block>
+			</form>
+			<form id="choice2">
+				<block>
+					<prompt>
+						<audio src="..." />Vorlesungszeiten 
+					</prompt>
+					<goto next="lectureTimesTopic.vxml"/>
+				</block>
+			</form>
+			<form id="choice3">
+				<block>
+					<prompt>
+						<audio src="..." />Bücherei Öffnungszeiten 
+					</prompt>
+					<goto next="libraryTimesTopic.vxml"/>
+				</block>
+			</form>
+			<form id="choice4">
+				<block>
+					<prompt>
+						<audio src="....wav" />Mensa Öffnungszeiten 
+					</prompt>
+					<goto next="canteenTimesTopic.vxml"/>
+					<disconnect/>
+				</block>
+			</form>
+			<form id="choice5">
+				<block>
+					<prompt>
+						<audio src="....wav" />THM Sport 
+					</prompt>
+					<goto next="thmSportsTopic.vxml"/>
+					<disconnect/>
+				</block>
+			</form>
+		</vxml
