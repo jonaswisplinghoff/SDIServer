@@ -17,7 +17,8 @@ Server for Sprachdialogsysteme, Medieninformatik Master, SS2014, Technische Hoch
 * `cd` to this directory (/Server)
 * `npm install`, to install dependencies
 * create mySQL Database called *sdi*
-* enter mySQL Account-data in line 8 of server.js
+* adjust mySQL Account-data in **config-sample.json**
+* rename this file to **config.json**
 
 ## Start
 
