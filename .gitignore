@@ -72,3 +72,4 @@ $RECYCLE.BIN/
 *.msm
 *.msp
 
+/Server/config.json

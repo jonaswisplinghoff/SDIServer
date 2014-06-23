@@ -5,7 +5,9 @@ var server = restify.createServer();
 	server.use(restify.queryParser());
 	server.use(restify.bodyParser({mapParams: true}));
 
-var db = orm.connect("mysql://root:root@localhost:3306/sdi");
+var config = require('./config');
+
+var db = orm.connect(config.dbUrl);
 
 db.on("connect", function (err) {
     if (err) {
