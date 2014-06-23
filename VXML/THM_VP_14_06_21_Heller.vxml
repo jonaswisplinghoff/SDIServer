@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<vxml xmlns="http://www.w3.org/2001/vxml" 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xsi:schemaLocation="http://www.w3.org/2001/vxml 
+   http://www.w3.org/TR/voicexml21/vxml.xsd"
+   version="2.1" xml:lang="de-DE">
+
+	<script>
+		var date= new Date();
+	</script>   
+   
+  <var name="gCallerPhone" />
+  <var name="gKursnummer" />
+  <var name="callId" expr="1" />
+  <var name="timestamp" />
+
+  <assign name="gCallerPhone" expr="(session.connection.remote.uri).toString()" />
+  <assign name="gCallerPhone" expr="'0' + gCallerPhone" />
+
+	<menu id="menu">
+		<grammar src="./menu.agl" />
+		<assign name="timestamp" expr="date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate() + 'T' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds()" />
+		<!-- data name="callStart" srcexpr="'http://localhost:8080/reports/start?callId='+callId+'&timestamp='+timestamp+'&ani='+gCallerPhone"-->
+		<prompt bargein="true"><!-- audio src="../prompts/willkommen.wav" / -->
+			Herzlich willkommen beim Sprachportal der Technischen Hochschule Mittelhessen.
+		</prompt>
+		<prompt bargein="true"><!-- audio src="../prompts/menue.wav" / -->
+			<!-- Möchten Sie allgemeine Informationen drücken Sie die Taste 1 oder sagen Sie Allgemein.
+			Möchten Sie Kursinformationen drücken Sie die Taste 2 oder sagen Sie Kurs. -->
+			Für allgemeine Informationen sagen Sie bitte INFOS.
+			Um kurspezifische Informationen zu erhalten sagen Sie bitte KURS.
+		</prompt>
+		<choice dtmf="1" next="#allgemein">
+			Allgemein
+		</choice>
+		<choice dtmf="2" next="#kurs">
+			Kurs
+		</choice>
+
+	</menu>
+
+	<form id="allgemein">
+		<assign name="timestamp" expr="date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate() + 'T' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds()" />
+		<!-- data name="menuChoice" srcexpr="'http://localhost:8080/reports/menu?callId='+callId+'&timestamp='+timestamp+'choice=allg'"-->
+		<field name="auswahl">
+			<!-- grammar ... / -->
+			<prompt><!-- audio src="../prompts/allgemein.wav" / -->
+				Möchten Sie unsere Öffnungszeiten wissen oder 
+				Informationen zu unserem Lageplan erfahren?
+			</prompt>
+			<filled>
+				<!-- ... -->
+			</filled>
+		</field>
+		<!-- goto next="inline.vxml"/ -->
+	</form>
+	
+	<form id="kurs">
+		<assign name="timestamp" expr="date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate() + 'T' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds()" />
+		<!-- data name="menuChoice" srcexpr="'http://localhost:8080/reports/menu?callId='+callId+'&timestamp='+timestamp+'choice=kurs'"-->
+		<!-- data name="checkANI" expr="./ANI.json"-->
+		<if cond="checkANI.ANI != gCallerPhone"/>
+			<field name="Matrikelnummer">
+			<grammar src="./matrikel.agl" />
+				<prompt count="1"><!--audio src="http://localhost:8080/audios/kurs_info_02.wav" /-->
+					<--Um Kursinformationen zu erhalten müssen Sie sich authentifizieren.
+					Nennen Sie mir bitte ihre sechsstellige Matrikelnummer. -->
+					Bitte nennen Sie Ihre Matrikelnummer.
+				</prompt>
+				<prompt count="2"><!--audio src="http://localhost:8080/audios/kurs_info_03.wav" /-->
+					Ihre Matrikelnummer steht auf Ihrem Studentenausweis. Bitte nennen Sie Ihre Matrikelnummer.
+				</prompt>
+				<nomatch>
+					<reprompt/>
+				</nomatch>
+				<noinput>
+					<reprompt/>
+				</noinput>
+				<filled>
+					<!-- data name="checkMatrikelnummer" srcexpr="'http://localhost:8080/matrikelnummer?callId='+callId+'&matrikelnummer='+Matrikelnummer"-->
+					<if cond="checkMatrikelnummer.status != 'ok'"/>
+						< block>
+							Die Authentifizierung ist leider fehlgeschlagen.
+						</block>
+						< goto next="#GoodBye" />
+					</if>
+				</filled>
+			</field>
+		</if>
+		<field name="Kursnummer">
+			<prompt><!--audio src="http://localhost:8080/audios/kurs_info_01.wav" /-->
+				Um Informationen zu einem bestimmten Kurs zu erhalten, nennen Sie bitte die Kursnummer.
+			</prompt>
+			<filled>
+				<assign name="gKursnummer" expr="Kursnummer" />
+				<goto next="#DeliverInfo" />
+			</filled>
+
+		<!-- goto next="ssml.vxml"/ -->
+	</form>
+	
+	<form id="GoodBye">
+		<block> Auf wiedersehen. </block>
+		<assign name="timestamp" expr="date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate() + 'T' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds()" />
+		<!-- data name="callEnd" srcexpr="'http://localhost:8080/reports/end?callId='+callId+'&timestamp='+timestamp"-->
+	</form>
+	
+	<form id="DeliverInfo">
+		<data name="ClassInfo" srcexpr="'http://localhost:8080/class?callId='+callId+'&classId='+gKursnummer" />
+		<if cond="ClassInfo.status == 'ok'" />
+			<block>
+				Zum Kurs <value expr="ClassInfo.classTitle" /> liegen folgende Informationen vor.
+				<value expr="ClassInfo.description" />
+			</block>
+		<else />
+			<block>
+				Kurs <value expr="gKursnummer" /> existiert nicht in der Datenbank.
+			</block>
+		</if>
+		<goto next="#MoreInfo" />
+	</form>
+	
+	<form id="MoreInfo">
+		<field name="callerWantsMoreInfo">
+			<grammar src="builtin:grammar/boolean" />
+			<prompt><!--audio src="http://localhost:8080/audios/more_info_01.wav" /-->
+				Möchten Sie weitere allgemeine Informationen oder Informationen zu einem bestimmten Kurs erhalten?
+			</prompt>
+			<filled>
+				<if cond="callerWantsMoreInfo == 'true'">
+					<goto next="#menu" />
+				<else />
+					<goto next="#GoodBye" />
+				</if>
+			</filled>
+	</form>
+
+  <noinput count="1">
+	<!--audio src="http://localhost:8080/audios/globals_01.wav" /-->
+	<!-- Ich konnte Sie leider nicht hören. -->
+	Ich habe Sie leider nicht verstanden.
+    <reprompt/>
+  </noinput>
+  <noinput count="2">
+	<!--audio src="http://localhost:8080/audios/globals_02.wav" /-->
+	<!-- Ich konnte Sie leider wieder nicht hören. -->
+	Ich habe Sie leider immer noch nicht verstanden. Bitte sprechen Sie etwas lauter.
+    <reprompt/>
+  </noinput>
+
+  <nomatch count="1">
+	<!--audio src="http://localhost:8080/audios/globals_03.wav" /-->
+	<!-- Ich konnte Sie leider nicht verstehen. -->
+	Wie war das?
+    <reprompt/>
+  </nomatch>
+  <nomatch count="2">
+	<!--audio src="http://localhost:8080/audios/globals_04.wav" /-->
+	<!--Ich konnte Sie leider wieder nicht verstehen. -->
+	Ich habe Sie leider nicht verstanden. Was haben Sie gesagt?
+    <reprompt/>
+  </nomatch>
+
+</vxml>
