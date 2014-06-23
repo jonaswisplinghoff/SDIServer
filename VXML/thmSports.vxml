@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<vxml xmlns="http://www.w3.org/2001/vxml"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.w3.org/2001/vxml http://www.w3.org/TR/voicexml21/vxml.xsd"
+version="2.1" xml:lang="de-DE">		
+
+<!-- db zugriff? ort-variable aus Menu_Info main? -->
+
+	<script>
+		<![CDATA[
+		function sportDate(x) {
+			return "01.08.2014";//db.getSportDate(ort);
+		}
+		]]>
+	</script>
+	
+	<form id="thmSports">
+		<field name="sportStart">					
+			<prompt> <!-- <audio src="../prompts/menu_info_15.wav" /> -->
+				Ab <value expr="sportDate(ort)"/> starten die ersten Sportangebote des Sportprogramms für <value expr="ort"/>.
+			</prompt>
+		</field>
+		<block>
+			<goto next="moreInfo.vxml" />
+		</block>
+	</form>
+</vxml>
