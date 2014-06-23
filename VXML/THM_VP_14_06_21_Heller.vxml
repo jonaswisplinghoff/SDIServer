@@ -14,17 +14,20 @@
   <var name="callId" expr="1" />
   <var name="timestamp" />
 
-  <assign name="gCallerPhone" expr="(session.connection.remote.uri).toString()" />
-  <assign name="gCallerPhone" expr="'0' + gCallerPhone" />
-
-	<menu id="menu">
-		<grammar src="./menu.agl" />
-		<assign name="timestamp" expr="date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate() + 'T' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds()" />
+	<form id="Welcome">
 		<!-- data name="callStart" srcexpr="'http://localhost:8080/reports/start?callId='+callId+'&timestamp='+timestamp+'&ani='+gCallerPhone"-->
-		<prompt bargein="true"><!-- audio src="../prompts/willkommen.wav" / -->
+		<block><!-- audio src="../prompts/willkommen.wav" / -->
+			<assign name="gCallerPhone" expr="(session.connection.remote.uri).toString()" />
+			<assign name="gCallerPhone" expr="'0' + gCallerPhone" />	
+			<assign name="timestamp" expr="date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate() + 'T' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds()" />
 			Herzlich willkommen beim Sprachportal der Technischen Hochschule Mittelhessen.
-		</prompt>
-		<prompt bargein="true"><!-- audio src="../prompts/menue.wav" / -->
+			<goto next="#Menu" />
+		</block>
+	</form>
+
+	<menu id="Menu">
+		<!--grammar src="./menu.agl" /-->
+		<prompt bargein="false"><!-- audio src="../prompts/menue.wav" / -->
 			<!-- Möchten Sie allgemeine Informationen drücken Sie die Taste 1 oder sagen Sie Allgemein.
 			Möchten Sie Kursinformationen drücken Sie die Taste 2 oder sagen Sie Kurs. -->
 			Für allgemeine Informationen sagen Sie bitte INFOS.
@@ -40,8 +43,10 @@
 	</menu>
 
 	<form id="allgemein">
-		<assign name="timestamp" expr="date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate() + 'T' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds()" />
-		<!-- data name="menuChoice" srcexpr="'http://localhost:8080/reports/menu?callId='+callId+'&timestamp='+timestamp+'choice=allg'"-->
+		<block>
+			<assign name="timestamp" expr="date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate() + 'T' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds()" />
+			<!-- data name="menuChoice" srcexpr="'http://localhost:8080/reports/menu?callId='+callId+'&timestamp='+timestamp+'choice=allg'"-->
+		</block>
 		<field name="auswahl">
 			<!-- grammar ... / -->
 			<prompt><!-- audio src="../prompts/allgemein.wav" / -->
@@ -56,14 +61,16 @@
 	</form>
 	
 	<form id="kurs">
-		<assign name="timestamp" expr="date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate() + 'T' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds()" />
+		<block>
+			<assign name="timestamp" expr="date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate() + 'T' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds()" />		
+		</block>
 		<!-- data name="menuChoice" srcexpr="'http://localhost:8080/reports/menu?callId='+callId+'&timestamp='+timestamp+'choice=kurs'"-->
 		<!-- data name="checkANI" expr="./ANI.json"-->
-		<if cond="checkANI.ANI != gCallerPhone"/>
-			<field name="Matrikelnummer">
+		<!--if cond="checkANI.ANI != gCallerPhone"/-->
+			<field name="Matrikelnummer" cond="checkANI.ANI != gCallerPhone">
 			<grammar src="./matrikel.agl" />
 				<prompt count="1"><!--audio src="http://localhost:8080/audios/kurs_info_02.wav" /-->
-					<--Um Kursinformationen zu erhalten müssen Sie sich authentifizieren.
+					<!--Um Kursinformationen zu erhalten müssen Sie sich authentifizieren.
 					Nennen Sie mir bitte ihre sechsstellige Matrikelnummer. -->
 					Bitte nennen Sie Ihre Matrikelnummer.
 				</prompt>
@@ -78,15 +85,15 @@
 				</noinput>
 				<filled>
 					<!-- data name="checkMatrikelnummer" srcexpr="'http://localhost:8080/matrikelnummer?callId='+callId+'&matrikelnummer='+Matrikelnummer"-->
-					<if cond="checkMatrikelnummer.status != 'ok'"/>
-						< block>
+					<if cond="checkMatrikelnummer.status != 'ok'" >
+						<prompt>
 							Die Authentifizierung ist leider fehlgeschlagen.
-						</block>
-						< goto next="#GoodBye" />
+						</prompt>
+						<goto next="#GoodBye" />
 					</if>
 				</filled>
 			</field>
-		</if>
+		<!--/if-->
 		<field name="Kursnummer">
 			<prompt><!--audio src="http://localhost:8080/audios/kurs_info_01.wav" /-->
 				Um Informationen zu einem bestimmten Kurs zu erhalten, nennen Sie bitte die Kursnummer.
@@ -95,29 +102,33 @@
 				<assign name="gKursnummer" expr="Kursnummer" />
 				<goto next="#DeliverInfo" />
 			</filled>
-
+		</field>
 		<!-- goto next="ssml.vxml"/ -->
 	</form>
 	
 	<form id="GoodBye">
-		<block> Auf wiedersehen. </block>
-		<assign name="timestamp" expr="date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate() + 'T' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds()" />
+		<block> 
+			<assign name="timestamp" expr="date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate() + 'T' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds()" />
+			Auf wiedersehen. 
+		</block>
 		<!-- data name="callEnd" srcexpr="'http://localhost:8080/reports/end?callId='+callId+'&timestamp='+timestamp"-->
 	</form>
 	
 	<form id="DeliverInfo">
-		<data name="ClassInfo" srcexpr="'http://localhost:8080/class?callId='+callId+'&classId='+gKursnummer" />
-		<if cond="ClassInfo.status == 'ok'" />
-			<block>
-				Zum Kurs <value expr="ClassInfo.classTitle" /> liegen folgende Informationen vor.
-				<value expr="ClassInfo.description" />
-			</block>
-		<else />
-			<block>
-				Kurs <value expr="gKursnummer" /> existiert nicht in der Datenbank.
-			</block>
-		</if>
-		<goto next="#MoreInfo" />
+		<data name="ClassInfo" srcexpr="http://localhost:8080/class" namelist="callId gKursnummer" />
+		<block>
+			<if cond="ClassInfo.status == 'ok'" >
+				<prompt>
+					Zum Kurs <value expr="ClassInfo.classTitle" /> liegen folgende Informationen vor.
+					<value expr="ClassInfo.description" />
+				</prompt>
+			<else />
+				<prompt>
+					Kurs <value expr="gKursnummer" /> existiert nicht in der Datenbank.
+				</prompt>
+			</if>
+			<goto next="#MoreInfo" />
+		</block>
 	</form>
 	
 	<form id="MoreInfo">
@@ -133,6 +144,7 @@
 					<goto next="#GoodBye" />
 				</if>
 			</filled>
+		</field>
 	</form>
 
   <noinput count="1">
