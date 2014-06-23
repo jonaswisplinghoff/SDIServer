@@ -3,23 +3,26 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
   xsi:schemaLocation="http://www.w3.org/2001/vxml 
    http://www.w3.org/TR/voicexml21/vxml.xsd"
-   version="2.1" xml:lang="de-DE">
-
-	<script>
-		var date= new Date();
-	</script>   
+   version="2.1" xml:lang="de-DE">   
    
-  <var name="gCallerPhone" />
-  <var name="gKursnummer" />
-  <var name="callId" expr="1" />
+  <var name="ani" />
+  <var name="classId" />
+  <var name="callId" />
   <var name="timestamp" />
+  <var name="choice" />
+  <var name="gName" />
 
 	<form id="Welcome">
-		<!-- data name="callStart" srcexpr="'http://localhost:8080/reports/start?callId='+callId+'&timestamp='+timestamp+'&ani='+gCallerPhone"-->
 		<block><!-- audio src="../prompts/willkommen.wav" / -->
-			<assign name="gCallerPhone" expr="(session.connection.remote.uri).toString()" />
-			<assign name="gCallerPhone" expr="'0' + gCallerPhone" />	
-			<assign name="timestamp" expr="date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate() + 'T' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds()" />
+			<script>
+				var date= new Date();
+			</script>
+			<assign name="ani" expr="(session.connection.remote.uri).toString()" />
+			<assign name="ani" expr="'0' + ani" />	
+			<assign name="timestamp" expr="date.getFullYear() + '-' + (date.getMonth()+1) + '-' + date.getDate() + 'T' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds()" />
+			<assign name="callId" expr="ani + date.getFullYear() + (date.getMonth()+1) + date.getDate() + date.getHours() + date.getMinutes() + date.getSeconds()" />
+			<data name="callStart" method="post" src="http://localhost:8080/reports/start" namelist="callId timestamp ani" />
+			<assign name="gName" expr="callStart.name" />
 			Herzlich willkommen beim Sprachportal der Technischen Hochschule Mittelhessen.
 			<goto next="#Menu" />
 		</block>
@@ -44,7 +47,10 @@
 
 	<form id="allgemein">
 		<block>
-			<assign name="timestamp" expr="date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate() + 'T' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds()" />
+			<script>
+				var date= new Date();
+			</script>
+			<assign name="timestamp" expr="date.getFullYear() + '-' + (date.getMonth()+1) + '-' + date.getDate() + 'T' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds()" />
 			<!-- data name="menuChoice" srcexpr="'http://localhost:8080/reports/menu?callId='+callId+'&timestamp='+timestamp+'choice=allg'"-->
 		</block>
 		<field name="auswahl">
@@ -62,13 +68,16 @@
 	
 	<form id="kurs">
 		<block>
-			<assign name="timestamp" expr="date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate() + 'T' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds()" />		
+			<script>
+				var date= new Date();
+			</script>
+			<assign name="timestamp" expr="date.getFullYear() + '-' + (date.getMonth()+1) + '-' + date.getDate() + 'T' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds()" />		
+			<assign name="choice" expr="'kurs'" />
+			<data name="menuChoice" method="post" src="http://localhost:8080/reports/menu" namelist="callId timestamp choice" />
 		</block>
-		<!-- data name="menuChoice" srcexpr="'http://localhost:8080/reports/menu?callId='+callId+'&timestamp='+timestamp+'choice=kurs'"-->
-		<!-- data name="checkANI" expr="./ANI.json"-->
-		<!--if cond="checkANI.ANI != gCallerPhone"/-->
-			<field name="Matrikelnummer" cond="checkANI.ANI != gCallerPhone">
-			<grammar src="./matrikel.agl" />
+			<field name="matrikelnummer" cond="gName.length == 0">
+			<!--grammar src="./matrikel.agl" /-->
+				<grammar src="builtin:dtmf/digits?minlength=6;maxlength=6" mode="dtmf"/>
 				<prompt count="1"><!--audio src="http://localhost:8080/audios/kurs_info_02.wav" /-->
 					<!--Um Kursinformationen zu erhalten müssen Sie sich authentifizieren.
 					Nennen Sie mir bitte ihre sechsstellige Matrikelnummer. -->
@@ -84,8 +93,8 @@
 					<reprompt/>
 				</noinput>
 				<filled>
-					<!-- data name="checkMatrikelnummer" srcexpr="'http://localhost:8080/matrikelnummer?callId='+callId+'&matrikelnummer='+Matrikelnummer"-->
-					<if cond="checkMatrikelnummer.status != 'ok'" >
+					<data name="checkMatrikelnummer" src="http://localhost:8080/matrikelnummer" namelist="callId matrikelnummer" />
+					<if cond="checkMatrikelnummer.name.length == 0" >
 						<prompt>
 							Die Authentifizierung ist leider fehlgeschlagen.
 						</prompt>
@@ -93,13 +102,13 @@
 					</if>
 				</filled>
 			</field>
-		<!--/if-->
 		<field name="Kursnummer">
+			<grammar src="builtin:dtmf/digits?minlength=2;maxlength=2" mode="dtmf"/>
 			<prompt><!--audio src="http://localhost:8080/audios/kurs_info_01.wav" /-->
 				Um Informationen zu einem bestimmten Kurs zu erhalten, nennen Sie bitte die Kursnummer.
 			</prompt>
 			<filled>
-				<assign name="gKursnummer" expr="Kursnummer" />
+				<assign name="classId" expr="'MM' + Kursnummer" />
 				<goto next="#DeliverInfo" />
 			</filled>
 		</field>
@@ -107,15 +116,18 @@
 	</form>
 	
 	<form id="GoodBye">
-		<block> 
-			<assign name="timestamp" expr="date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate() + 'T' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds()" />
+		<block>
+			<script>
+				var date= new Date();
+			</script>
+			<assign name="timestamp" expr="date.getFullYear() + '-' + (date.getMonth()+1) + '-' + date.getDate() + 'T' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds()" />
+			<data name="callEnd" method="post" src="http://localhost:8080/reports/end" namelist="callId timestamp" />
 			Auf wiedersehen. 
 		</block>
-		<!-- data name="callEnd" srcexpr="'http://localhost:8080/reports/end?callId='+callId+'&timestamp='+timestamp"-->
 	</form>
 	
 	<form id="DeliverInfo">
-		<data name="ClassInfo" srcexpr="http://localhost:8080/class" namelist="callId gKursnummer" />
+		<data name="ClassInfo" src="http://localhost:8080/class" namelist="callId classId" />
 		<block>
 			<if cond="ClassInfo.status == 'ok'" >
 				<prompt>
