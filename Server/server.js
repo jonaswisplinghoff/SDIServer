@@ -101,6 +101,8 @@ db.drop(function(){
 
 server.post('/reports/start', function (req, res, next) {
    console.log('POST /reports/start callId: ' + req.params.callId + ' timestamp: ' + req.params.timestamp + ' ani: ' + req.params.ani);
+   res.contentType = 'json';
+   var response = {};
 
    if(typeof req.params.callId != "undefined" && 
    		typeof req.params.timestamp != "undefined" && 
@@ -123,22 +125,29 @@ server.post('/reports/start', function (req, res, next) {
 		    	return;
 			}
 			if(persons.length == 1){
-				res.send('{"status": "ok", "name": "' + persons[0].getFullName() + '"}');
+				response.status = "ok";
+				response.name = persons[0].getFullName();
+				res.send(response);
 			}
 			else{
-				res.send('{"status": "ok", "name": ""}');
+				response.status = "ok";
+				response.name = "";
+				res.send(response);
 			}
 		});
    }
    else{
-	   	res.send('{"status": "not_ok", "name": ""}');
+   		response.status = "not_ok";
+   		response.name = "";
+   		res.send(response);
    }
-   
    next();
 });
 
 server.post('/reports/menu', function (req, res, next) {
    console.log('POST /reports/menu callId: ' + req.params.callId + ' timestamp: ' + req.params.timestamp + ' choice: ' + req.params.choice);
+   res.contentType = 'json';
+   var response = {};
 
    if(typeof req.params.callId != "undefined" && 
    		typeof req.params.timestamp != "undefined" && 
@@ -155,17 +164,20 @@ server.post('/reports/menu', function (req, res, next) {
 		    	return;
 			}
 		});
-   		res.send('{"status": "ok"}');
+		response.status = "ok";
+		res.send(response);
    }
    else{
-	   	res.send('{"status": "not_ok"}');
+   		response.status = "not_ok";
+   		res.send(response);
    }
-   
    next();
 });
 
 server.post('/reports/end', function (req, res, next) {
    console.log('POST /reports/end callId: ' + req.params.callId + ' timestamp: ' + req.params.timestamp);
+   res.contentType = 'json';
+   var response = {};
 
    if(typeof req.params.callId != "undefined" && 
    		typeof req.params.timestamp != "undefined"){	
@@ -180,17 +192,20 @@ server.post('/reports/end', function (req, res, next) {
 			    	return;
 				}
 			});
-   			res.send('{"status": "ok"}');   	
+   			response.status = "ok";
+   			res.send(response);	
    }
    else{
-	   		res.send('{"status": "not_ok"}');
+	   		response.status = "not_ok";
+	   		res.send(response);
    }
-   
    next();
 });
 
 server.get('/matrikelnummer', function (req, res, next) {
-   console.log('GET /matrikelnummer id: ' + req.params.callId + 'matrikelnummer: ' + req.params.matrikelnummer);
+   console.log('GET /matrikelnummer id: ' + req.params.callId + ' matrikelnummer: ' + req.params.matrikelnummer);
+   res.contentType = 'json';
+   var response = {};
 
    if(typeof req.params.callId != "undefined" && 
    		typeof req.params.matrikelnummer != "undefined"){	
@@ -201,21 +216,30 @@ server.get('/matrikelnummer', function (req, res, next) {
 		    	return;
 			}
 			if(persons.length == 1){
-				res.send('{"status": "ok", "name": "' + persons[0].getFullName() + '"}');
+				response.status = "ok";
+				response.name = persons[0].getFullName();
+				res.send(response);
 			}
 			else{
-				res.send('{"status": "not_ok", "name": ""}');
+				response.status = "ok";
+				response.name = "";
+				res.send(response);
 			}
 		});
    }
    else{
-	   res.send('{"status": "not_ok", "name": ""}');
+   		response.status = "not_ok";
+		response.name = "";
+		res.send(response);
    }
-   
-   next();});
+   next();
+});
+
 
 server.get('/class', function (req, res, next) {
    console.log('GET /class callId: ' + req.params.callId + ' classId: ' + req.params.classId);
+   res.contentType = 'json';
+   var response = {};
 
    if(typeof req.params.callId != "undefined" && typeof req.params.classId != "undefined"){	
    
@@ -225,15 +249,27 @@ server.get('/class', function (req, res, next) {
 		    	return;
 			}
 	   		if(classes.length == 1){
-	   			res.send('{"status":"ok","classId":"'+classes[0].getClassId()+'", "classTitle": "'+classes[0].getClassTitle()+'", "description": "'+classes[0].getClassDescription()+'"}');
+	   			response.status = "ok";
+	   			response.classId = classes[0].getClassId();
+	   			response.classTitle = classes[0].getClassTitle();
+	   			response.description = classes[0].getClassDescription();
+	   			res.send(response);
 	   		}
 	   		else{
-			   	res.send('{"status": "not_ok", "classId": "", "classTitle": "", "description":""}');
+	   			response.status = "not_ok";
+	   			response.classId = "";
+	   			response.classTitle = "";
+	   			response.description = "";
+	   			res.send(response);
 		   	}
    		});
    }
    else{
-   		res.send('{"status": "not_ok", "classId": "", "classTitle": "", "description": ""}');
+   		response.status = "not_ok";
+		response.classId = "";
+		response.classTitle = "";
+		response.description = "";
+		res.send(response);
    }
    next();
 });
