@@ -1,9 +1,7 @@
-var restify = require('restify');
-var orm = require("orm"); 
+var express = require('express');
+var app = express();
 
-var server = restify.createServer();
-	server.use(restify.queryParser());
-	server.use(restify.bodyParser({mapParams: true}));
+var orm = require("orm"); 
 
 var config = require('./config');
 
@@ -39,7 +37,8 @@ var Course = db.define('course', {
 	id		:{type: "serial", key: true},
 	classId	: String,
 	classTitle: String,
-	classDescription: { type: "text" }
+	classDescription: { type: "text" },
+	classWeekDay: {type: "enum", values: [ "Montags", "Dienstags", "Mitwochs", "Donnerstags", "Freitags", "Samstags", "Sonntags" ]}
 }, {
   methods:{
 	getClassId: function (){
@@ -62,7 +61,18 @@ var Log = db.define('log', {
 	choice: String
 }, {
 	methods:{
-		
+		getCallId: function(){
+			return this.callId;
+		},
+		getTimeStamp: function(){
+			return this.timestamp;
+		},
+		getEvent: function(){
+			return this.event;
+		},
+		getChoice:function(){
+			return this.choice;
+		}
 	}
 });
 
@@ -101,18 +111,17 @@ db.drop(function(){
 
 // TODO: check incoming timestamps for valid format 
 
-server.post('/reports/start', function (req, res, next) {
-   console.log('POST /reports/start callId: ' + req.params.callId + ' timestamp: ' + req.params.timestamp + ' ani: ' + req.params.ani);
-   res.contentType = 'json';
+app.post('/reports/start', express.timeout(5000), function (req, res, next) {
+   console.log('POST /reports/start callId: ' + req.query.callId + ' timestamp: ' + req.query.timestamp + ' ani: ' + req.query.ani);
    var response = {};
-
-   if(typeof req.params.callId != "undefined" && 
-   		typeof req.params.timestamp != "undefined" && 
-   		typeof req.params.ani != "undefined"){	
+      
+   if(typeof req.query.callId != "undefined" && 
+   		typeof req.query.timestamp != "undefined" && 
+   		typeof req.query.ani != "undefined"){	
 
 	   	var newLog = {};
-	   	newLog.callId = req.params.callId;
-	   	newLog.timestamp = req.params.timestamp;
+	   	newLog.callId = req.query.callId;
+	   	newLog.timestamp = req.query.timestamp;
 	   	newLog.event = "start";
 	   	Log.create(newLog, function(err, results) {
 			if (err) {
@@ -121,7 +130,7 @@ server.post('/reports/start', function (req, res, next) {
 			}
 		});
 
-		Student.find({ani:req.params.ani}, function(err, persons){
+		Student.find({ani:req.query.ani}, function(err, persons){
 			if (err) {
 		    	console.log("Something is wrong with the connection", err);
 		    	return;
@@ -143,23 +152,22 @@ server.post('/reports/start', function (req, res, next) {
    		response.name = "";
    		res.send(response);
    }
-   next();
 });
 
-server.post('/reports/menu', function (req, res, next) {
-   console.log('POST /reports/menu callId: ' + req.params.callId + ' timestamp: ' + req.params.timestamp + ' choice: ' + req.params.choice);
+app.post('/reports/menu', function (req, res, next) {
+   console.log('POST /reports/menu callId: ' + req.query.callId + ' timestamp: ' + req.query.timestamp + ' choice: ' + req.query.choice);
    res.contentType = 'json';
    var response = {};
 
-   if(typeof req.params.callId != "undefined" && 
-   		typeof req.params.timestamp != "undefined" && 
-   		typeof req.params.choice != "undefined"){	
+   if(typeof req.query.callId != "undefined" && 
+   		typeof req.query.timestamp != "undefined" && 
+   		typeof req.query.choice != "undefined"){	
    		
    		var newLog = {};
-	   	newLog.callId = req.params.callId;
-	   	newLog.timestamp = req.params.timestamp;
+	   	newLog.callId = req.query.callId;
+	   	newLog.timestamp = req.query.timestamp;
 	   	newLog.event = "menu";
-	   	newLog.choice = req.params.choice;
+	   	newLog.choice = req.query.choice;
 	   	Log.create(newLog, function(err, results) {
 			if (err) {
 		    	console.log("Something is wrong with the log creation", err);
@@ -173,20 +181,19 @@ server.post('/reports/menu', function (req, res, next) {
    		response.status = "not_ok";
    		res.send(response);
    }
-   next();
 });
 
-server.post('/reports/end', function (req, res, next) {
-   console.log('POST /reports/end callId: ' + req.params.callId + ' timestamp: ' + req.params.timestamp);
+app.post('/reports/end', function (req, res, next) {
+   console.log('POST /reports/end callId: ' + req.query.callId + ' timestamp: ' + req.query.timestamp);
    res.contentType = 'json';
    var response = {};
 
-   if(typeof req.params.callId != "undefined" && 
-   		typeof req.params.timestamp != "undefined"){	
+   if(typeof req.query.callId != "undefined" && 
+   		typeof req.query.timestamp != "undefined"){	
 	   		
 	   		var newLog = {};
-		   	newLog.callId = req.params.callId;
-		   	newLog.timestamp = req.params.timestamp;
+		   	newLog.callId = req.query.callId;
+		   	newLog.timestamp = req.query.timestamp;
 		   	newLog.event = "end";
 		   	Log.create(newLog, function(err, results) {
 				if (err) {
@@ -201,18 +208,17 @@ server.post('/reports/end', function (req, res, next) {
 	   		response.status = "not_ok";
 	   		res.send(response);
    }
-   next();
 });
 
-server.get('/matrikelnummer', function (req, res, next) {
-   console.log('GET /matrikelnummer id: ' + req.params.callId + ' matrikelnummer: ' + req.params.matrikelnummer);
+app.get('/matrikelnummer', function (req, res, next) {
+   console.log('GET /matrikelnummer id: ' + req.query.callId + ' matrikelnummer: ' + req.query.matrikelnummer);
    res.contentType = 'json';
    var response = {};
 
-   if(typeof req.params.callId != "undefined" && 
-   		typeof req.params.matrikelnummer != "undefined"){	
+   if(typeof req.query.callId != "undefined" && 
+   		typeof req.query.matrikelnummer != "undefined"){	
 
-	   	Student.find({matrikelnummer: req.params.matrikelnummer}, function(err, persons){
+	   	Student.find({matrikelnummer: req.query.matrikelnummer}, function(err, persons){
 			if (err) {
 		    	console.log("Something is wrong with the connection", err);
 		    	return;
@@ -234,18 +240,17 @@ server.get('/matrikelnummer', function (req, res, next) {
 		response.name = "";
 		res.send(response);
    }
-   next();
 });
 
 
-server.get('/class', function (req, res, next) {
-   console.log('GET /class callId: ' + req.params.callId + ' classId: ' + req.params.classId);
+app.get('/class', function (req, res, next) {
+   console.log('GET /class callId: ' + req.query.callId + ' classId: ' + req.query.classId);
    res.contentType = 'json';
    var response = {};
 
-   if(typeof req.params.callId != "undefined" && typeof req.params.classId != "undefined"){	
+   if(typeof req.query.callId != "undefined" && typeof req.query.classId != "undefined"){	
    
-   		Course.find({classId: req.params.classId}, function(err, classes){
+   		Course.find({classId: req.query.classId}, function(err, classes){
 	   		if (err) {
 		    	console.log("Something is wrong with the connection", err);
 		    	return;
@@ -273,10 +278,50 @@ server.get('/class', function (req, res, next) {
 		response.description = "";
 		res.send(response);
    }
-   next();
 });
 
+app.get('/reports', function (req, res, next) {
 
-server.listen(8080, function() {
-  console.log('%s listening at %s', server.name, server.url);
+	console.log('GET /reports');
+    // Website you wish to allow to connect
+    res.setHeader('Access-Control-Allow-Origin', config.webServerCotext);
+
+    // Request methods you wish to allow
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+
+    // Request headers you wish to allow
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+
+    // Set to true if you need the website to include cookies in the requests sent
+    // to the API (e.g. in case you use sessions)
+    res.setHeader('Access-Control-Allow-Credentials', true);
+
+	var response = [];
+
+	Log.all({}, function(err, logs) {
+ 		if (err) {
+	    	console.log("Something is wrong with the connection", err);
+	    	return;
+		}
+
+		
+
+		console.log(logs.length);
+ 	});
+
+
+	/**var response = [{
+		callId:"",
+		start:"",
+		end:"", 
+		menus:[]
+	}];*/
+
+	response = [{id: 1, name: "test"}, {id: 2, name: "test"}, {id: 3, name: "test"}, {id: 4, name: "test"}];
+
+	res.send(response);
+});
+
+var server = app.listen(8080, function() {
+	console.log('Listening on port %d', server.address().port);
 });
