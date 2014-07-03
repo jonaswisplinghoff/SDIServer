@@ -1,0 +1,8 @@
+<form id="kurs">
+	<field name="kurs" type="digits?length=6">
+		<prompt>Geben Sie bitte ihre Matrikelnummer ein</prompt>
+		<filled>
+			<goto next="#kursnr"/>
+		</filled>
+	</field>
+</form>
