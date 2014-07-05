@@ -22,6 +22,6 @@ Server for Sprachdialogsysteme, Medieninformatik Master, SS2014, Technische Hoch
 
 ## Start
 
-* `node server.js`
+* `npm start`
 * see how the tables in the database apppear
 * try some requests as shown in API Doc

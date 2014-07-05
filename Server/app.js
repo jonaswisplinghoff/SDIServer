@@ -1,23 +1,7 @@
 var express = require('express');
-var app = express();
+var path = require('path');
 
-var orm = require("orm"); 
-
-var config = require('./config');
-
-var db = orm.connect(config.dbUrl);
-
-db.on("connect", function (err) {
-    if (err) {
-        console.log("Something is wrong with the connection", err);
-        return;
-    }
-
-    console.log("Database connected!");
-    
-});
-
-// !MODELS
+var db = require('./db');
 
 var Student = db.define('student', {
   id      : { type: "serial", key: true },
@@ -107,11 +91,20 @@ db.drop(function(){
     Log.sync(function(){});
 }); 
 
-// !REQUEST HANDLER
 
-// TODO: check incoming timestamps for valid format 
+var app = express();
 
-app.post('/reports/start', express.timeout(5000), function (req, res, next) {
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'jade');
+
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.get('/', function(req, res) {
+  res.render('index', { title: 'Express' });
+});
+
+app.post('/reports/start', function (req, res) {
    console.log('POST /reports/start callId: ' + req.query.callId + ' timestamp: ' + req.query.timestamp + ' ani: ' + req.query.ani);
    var response = {};
       
@@ -154,7 +147,7 @@ app.post('/reports/start', express.timeout(5000), function (req, res, next) {
    }
 });
 
-app.post('/reports/menu', function (req, res, next) {
+app.post('/reports/menu', function (req, res) {
    console.log('POST /reports/menu callId: ' + req.query.callId + ' timestamp: ' + req.query.timestamp + ' choice: ' + req.query.choice);
    res.contentType = 'json';
    var response = {};
@@ -183,7 +176,7 @@ app.post('/reports/menu', function (req, res, next) {
    }
 });
 
-app.post('/reports/end', function (req, res, next) {
+app.post('/reports/end', function (req, res) {
    console.log('POST /reports/end callId: ' + req.query.callId + ' timestamp: ' + req.query.timestamp);
    res.contentType = 'json';
    var response = {};
@@ -210,7 +203,7 @@ app.post('/reports/end', function (req, res, next) {
    }
 });
 
-app.get('/matrikelnummer', function (req, res, next) {
+app.get('/matrikelnummer', function (req, res) {
    console.log('GET /matrikelnummer id: ' + req.query.callId + ' matrikelnummer: ' + req.query.matrikelnummer);
    res.contentType = 'json';
    var response = {};
@@ -243,7 +236,7 @@ app.get('/matrikelnummer', function (req, res, next) {
 });
 
 
-app.get('/class', function (req, res, next) {
+app.get('/class', function (req, res) {
    console.log('GET /class callId: ' + req.query.callId + ' classId: ' + req.query.classId);
    res.contentType = 'json';
    var response = {};
@@ -280,22 +273,10 @@ app.get('/class', function (req, res, next) {
    }
 });
 
-app.get('/reports', function (req, res, next) {
+app.get('/reports', function (req, res) {
 
 	console.log('GET /reports');
-    // Website you wish to allow to connect
-    res.setHeader('Access-Control-Allow-Origin', config.webServerCotext);
-
-    // Request methods you wish to allow
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-
-    // Request headers you wish to allow
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-
-    // Set to true if you need the website to include cookies in the requests sent
-    // to the API (e.g. in case you use sessions)
-    res.setHeader('Access-Control-Allow-Credentials', true);
-
+    
 	var response = [];
 
 	Log.all({}, function(err, logs) {
@@ -322,6 +303,38 @@ app.get('/reports', function (req, res, next) {
 	res.send(response);
 });
 
-var server = app.listen(8080, function() {
-	console.log('Listening on port %d', server.address().port);
+
+
+/// catch 404 and forward to error handler
+app.use(function(req, res, next) {
+    var err = new Error('Not Found');
+    err.status = 404;
+    next(err);
 });
+
+/// error handlers
+
+// development error handler
+// will print stacktrace
+if (app.get('env') === 'development') {
+    app.use(function(err, req, res, next) {
+        res.status(err.status || 500);
+        res.render('error', {
+            message: err.message,
+            error: err
+        });
+    });
+}
+
+// production error handler
+// no stacktraces leaked to user
+app.use(function(err, req, res, next) {
+    res.status(err.status || 500);
+    res.render('error', {
+        message: err.message,
+        error: {}
+    });
+});
+
+
+module.exports = app;
