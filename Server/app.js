@@ -101,7 +101,17 @@ app.set('view engine', 'jade');
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', function(req, res) {
-  res.render('index', { title: 'Express' });
+  Log.all({}, function(err, logs) {
+ 		if (err) {
+	    	console.log("Something is wrong with the connection", err);
+	    	return;
+		}
+		
+		
+		exampleResponse = [{id: 1, name: "test1"}, {id: 2, name: "test2"}, {id: 3, name: "test3"}, {id: 4, name: "test4"}];
+		
+		res.render('index', { title: 'THM Sprachportal Server', logs: exampleResponse });
+	});
 });
 
 app.post('/reports/start', function (req, res) {
@@ -271,36 +281,6 @@ app.get('/class', function (req, res) {
 		response.description = "";
 		res.send(response);
    }
-});
-
-app.get('/reports', function (req, res) {
-
-	console.log('GET /reports');
-    
-	var response = [];
-
-	Log.all({}, function(err, logs) {
- 		if (err) {
-	    	console.log("Something is wrong with the connection", err);
-	    	return;
-		}
-
-		
-
-		console.log(logs.length);
- 	});
-
-
-	/**var response = [{
-		callId:"",
-		start:"",
-		end:"", 
-		menus:[]
-	}];*/
-
-	response = [{id: 1, name: "test"}, {id: 2, name: "test"}, {id: 3, name: "test"}, {id: 4, name: "test"}];
-
-	res.send(response);
 });
 
 

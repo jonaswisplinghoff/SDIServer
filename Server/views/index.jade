@@ -1,5 +1,7 @@
 extends layout
 
 block content
-  h1= title
+  h1 #{title}
   p Welcome to #{title}
+  each log in logs
+    p #{log.id}: #{log.name}
