@@ -5,17 +5,9 @@ block content
     h1 #{title}
     p Welcome to #{title}
     p You have #{logs.length} Logs
-  table
-    tr
-      td LogId
-      td CallId
-      td Timestamp
-      td Event
-      td Choice
+
+  div.list-group
     each log in logs
-      tr
-        td #{log.id}
-        td #{log.callId}
-        td #{log.timestamp}
-        td #{log.event}
-        td #{log.choice}
+        a.list-group-item
+            h4 #{log.id}
+            p.list-group-item-text #{log.event}
