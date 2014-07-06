@@ -1,7 +1,16 @@
-Oeffnungszeiten:public (Wahl:w){<oeffnungszeiten $w>}
+Oeffnungszeiten:public (Wahlmitdreck:w){<oeffnungszeiten $w>}
+
+Wahlmitdreck [ (?Pregarbage [Wahl]  { return ($return) } ?Postgarbage) ]
+
+Wahl [ FB GI WZ ] { return ($return) }
 
 FB [ friedberg ] { return ("fb")}
 GI [ giessen ] { return ("gi")}
 WZ [ wetzlar ] { return ("wz")}
 
-Wahl [ FB GI WZ ] { return ($return) }
+								
+Pregarbage [ bitte (ich moechte)
+				]
+				
+Postgarbage [ bitte 
+				]

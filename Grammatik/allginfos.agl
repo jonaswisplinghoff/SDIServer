@@ -1,10 +1,33 @@
-Allginfos:public (Wahl:w){<allginfos $w>}
+Allginfos:public (Wahlmitdreck:w){<allginfos $w>}
 
-Wahl  [
-        sekretariat      {return ("Sekretariat")}
-        oeffnungszeiten		{ return ("Oeffnungszeiten") }
-				vorlesungszeiten {return ("Vorlesungszeiten") }
-				bibliothek					{ return ("Bibliothek") }
-				mensa							{ return ("Mensa") }
-				sport							{ return ("Sport") }
+Wahlmitdreck [ (?Pregarbage [Wahl]  { return ($return) } ?Postgarbage) ]
+
+Wahl  [ 
+        Sekretariat      
+        Oeffnungszeiten		
+				Vorlesungszeiten 
+				Bibliothek
+				Mensa
+				Sport
+				?Postgarbage
+				]
+				
+Sekretariat [ sekretariat buero information ] {return ("Sekretariat")}
+
+Oeffnungszeiten [oeffnungszeiten ] { return ("Oeffnungszeiten")}
+
+Vorlesungszeiten [vorlesungszeiten vorlesung semesterzeiten] {return ("Vorlesungszeiten") }
+
+Bibliothek [bibliothek bib buecherei] { return ("Bibliothek") }
+
+Mensa [mensa kantine essen] { return ("Mensa") }
+
+Sport	 [sport sportbuero hochschulsport] { return ("Sport") }
+
+
+				
+Pregarbage [ bitte (ich moechte) (ich wuerde gern)
+				]
+				
+Postgarbage [ bitte 
 				]

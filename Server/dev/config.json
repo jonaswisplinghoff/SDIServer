@@ -1,4 +1,0 @@
-{
-	"dbUrl": "mysql://root:root@localhost:8889/sdi",
-	"webServerCotext": "http://localhost:8888"
-}

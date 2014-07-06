@@ -1,0 +1,13 @@
+Kursnr:public (Wahlmitdreck:w) {<kursnr $w>}
+
+Wahlmitdreck [ (?Pregarbage [Kurs]  { return ($return) } ?Postgarbage) ]
+
+
+Kurs [ sprachdialogsysteme (m m vierzehn) ] { return ("MM14")}
+
+
+Pregarbage [ bitte (ich moechte)
+				]
+
+Postgarbage [ bitte 
+				]

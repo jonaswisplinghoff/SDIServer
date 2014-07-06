@@ -1,10 +1,19 @@
-Vorlesungszeiten:public (Wahl:w){<vorlesungszeiten $w>}
-				
-Wahl ( Semester:s Jahr:j ) {return (strcat($s $j)))}
+Vorlesungszeiten:public (Wahlmitdreck:w) {<vorlesungszeiten $w>}
 
-Ws [ wintersemester ws ] { return ("ws")}
-Ss [ sommersemester ss ] { return ("ss")}
+Wahlmitdreck [ (?Pregarbage [Wahl]  { return ($return) } ?Postgarbage) ]
 
-Jahr [ 14 2014 ] { return ("14")}
+Ws [ wintersemester ws winter ] { return ("ws")}
+Ss [ sommersemester ss sommer ] { return ("ss")}
+
+Jahr [ vierzehn zweitausendvierzehn ] { return ("14")}
 
 Semester [ Ws Ss ] { return ($return)}
+
+Wahl ( Semester:s Jahr:j ) {return (strcat($s $j))}
+
+								
+Pregarbage [ bitte (ich moechte)
+				]
+				
+Postgarbage [ bitte 
+				]
