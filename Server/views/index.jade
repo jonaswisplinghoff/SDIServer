@@ -3,5 +3,17 @@ extends layout
 block content
   h1 #{title}
   p Welcome to #{title}
-  each log in logs
-    p #{log.id}: #{log.name}
+  table
+    tr
+      td LogId
+      td CallId
+      td Timestamp
+      td Event
+      td Choice
+    each log in logs
+      tr
+        td #{log.id}
+        td #{log.callId}
+        td #{log.timestamp}
+        td #{log.event}
+        td #{log.choice}

@@ -107,10 +107,11 @@ app.get('/', function(req, res) {
 	    	return;
 		}
 		
+		var response = logs;
 		
-		exampleResponse = [{id: 1, name: "test1"}, {id: 2, name: "test2"}, {id: 3, name: "test3"}, {id: 4, name: "test4"}];
+		var exampleResponse = [{id: 1, name: "test1"}, {id: 2, name: "test2"}, {id: 3, name: "test3"}, {id: 4, name: "test4"}];
 		
-		res.render('index', { title: 'THM Sprachportal Server', logs: exampleResponse });
+		res.render('index', { title: 'THM Sprachportal Server', logs: response });
 	});
 });
 
