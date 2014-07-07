@@ -12,11 +12,11 @@ version="2.1" xml:lang="de-DE">
 					<prompt>
 						Bitte, wähle ein THM Standort.
 					</prompt>
-					<filled>
+					<filled >
 						<prompt>
 							Deine Wahl war
-							<value expr="lastresult$.utterance"/>. Die Kantine in 
-	
+							<!--<value expr="lastresult$.utterance"/>. Die Kantine in -->
+							<value expr =  "CanteenTimes.oeffnungszeiten"/> Die Kantine in
 							<value expr="lastresult$.interpretation.location"/>hat geöffnet
 							<value expr="lastresult$.interpretation.openingTimes"/>.
 						</prompt>
