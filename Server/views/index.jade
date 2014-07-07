@@ -2,12 +2,40 @@ extends layout
 
 block content
   div.jumbotron
-    h1 #{title}
-    p Welcome to #{title}
-    p You have #{logs.length} Logs
+    h1 SDI-Reporting
+    p You have #{logs.length} reports
 
   div.list-group
     each log in logs
-        a.list-group-item
-            h4 #{log.id}
-            p.list-group-item-text #{log.event}
+        a(class='list-group-item', type='button', data-toggle='modal', data-target='#reportDetail#{log.callId}')
+            h4 CallID: #{log.callId}
+            p.list-group-item-text Start: #{log.start}
+            p.list-group-item-text End: #{log.end}
+
+  each log in logs
+      div(class=['modal', 'fade'], tabindex='-1', id='reportDetail#{log.callId}', role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
+          div.modal-dialog
+                div.modal-content
+                   div.modal-header
+                       h4.modal-title CallID: #{log.callId}
+                   div.modal-body
+                        div(class=['panel', 'panel-primary'])
+                            div.panel-heading Info
+                            div.panel-body
+                               div ani: #{log.ani}
+                               div matrikelnummer: #{log.matrikelnummer}
+                               div name: #{log.name}
+                        div(class=['panel', 'panel-info'])
+                            div.panel-heading Call-history
+                            div.panel-body
+                                div.list-group
+                                    a.list-group-item
+                                        h4 Start : #{log.start}
+                                    each menu in log.menus
+                                        a.list-group-item
+                                            h4 #{menu.event} : #{menu.timeStamp}
+                                            p.list-group-item-text choise: #{menu.choice}
+                                    a.list-group-item
+                                        h4 End : #{log.end}
+                   div.modal-footer
+                       button(class=['btn', 'btn-default'], data-dismiss='modal') Close
