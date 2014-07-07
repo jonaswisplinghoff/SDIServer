@@ -2,12 +2,13 @@
 <vxml xmlns="http://www.w3.org/2001/vxml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3.org/2001/vxml http://www.w3.org/TR/voicexml21/vxml.xsd" version="2.1" xml:lang="de-DE">
 	
 	<var name="ani" />
-  <var name="callId" />
-  <var name="timestamp" />
-  <var name="gName" />
+	<var name="callId" />
+	<var name="timestamp" />
+	<var name="gName" />
 	
 	<form id="Welcome">
-		<block><!-- audio src="../prompts/willkommen.wav" / -->
+		<block>
+			<!-- audio src="../prompts/willkommen.wav" / -->
 			<script>
 				var date= new Date();
 			</script>
