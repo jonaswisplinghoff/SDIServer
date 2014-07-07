@@ -51,7 +51,7 @@ Erstelle Logeintrag für Event: Start Call
 
 ### Target
 
-`POST /reports/start`
+`GET /reports/start`
 
 ### Parameters
 
@@ -63,7 +63,7 @@ Erstelle Logeintrag für Event: Start Call
 
 ### Request
 
-`curl -X POST "http://0.0.0.0:8080/reports/start?callId=123&timestamp=2014-05-27T12:15:11&ani=0800111111"`
+`curl -X GET "http://0.0.0.0:8080/reports/start?callId=123&timestamp=2014-05-27T12:15:11&ani=0800111111"`
 
 ### Response
 
@@ -91,7 +91,7 @@ Erstelle Logeintrag für Menüauswahl-Event:
 
 ### Target
 
-`POST /reports/menu`
+`GET /reports/menu`
 
 ### Parameters
 
@@ -103,7 +103,7 @@ Erstelle Logeintrag für Menüauswahl-Event:
 
 ### Request
 
-`curl -X POST "http://0.0.0.0:8080/reports/menu?callId=123&timestamp=2014-05-27T12:15:11&choice=asd"`
+`curl -X GET "http://0.0.0.0:8080/reports/menu?callId=123&timestamp=2014-05-27T12:15:11&choice=asd"`
 
 ### Response
 
@@ -129,7 +129,7 @@ Erstelle Logeintrag für End-Call-Event:
 
 ### Target
 
-`POST /reports/end`
+`GET /reports/end`
 
 ### Parameters
 
@@ -140,7 +140,7 @@ Erstelle Logeintrag für End-Call-Event:
 
 ### Request
 
-`curl -X POST "http://0.0.0.0:8080/reports/end?callId=123&timestamp=2014-05-27T12:15:11"`
+`curl -X GET "http://0.0.0.0:8080/reports/end?callId=123&timestamp=2014-05-27T12:15:11"`
 
 ### Response
 
