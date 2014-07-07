@@ -16,15 +16,13 @@
 			<assign name="choice" expr="'kurs'" />
 			<data name="menuChoice" src="http://localhost:8080/reports/menu" namelist="callId timestamp choice" />
 		</block>
-		<field name="matrikelnummer" cond="gName.length == 0">
-			<!--grammar src="./matrikel.agl" /-->
-			<grammar src="builtin:dtmf/digits?minlength=6;maxlength=6" mode="dtmf"/>
-			<prompt count="1">
+		<field name="matrikelnummer" cond="gName.length == 0" type="digits?minlength=6;maxlength=6">
+			<prompt count="1" bargein="false">
 				<audio src="../Dialogdesign/Audiofiles/kurs_info_02.wav">
 					Bitte nennen Sie Ihre Matrikelnummer.
 				</audio>
 			</prompt>
-			<prompt count="2">
+			<prompt count="2" bargein="false">
 				<audio src="../Dialogdesign/Audiofiles/kurs_info_03.wav">
 					Ihre Matrikelnummer finden sie auf Ihrem Studentenausweis. Bitte nennen Sie Ihre Matrikelnummer.
 				</audio>
@@ -43,14 +41,14 @@
 			</filled>
 		</field>
 		<field name="Kursnummer">
-			<grammar src="builtin:dtmf/digits?minlength=2;maxlength=2" mode="dtmf"/>
-			<prompt>
+			<grammar src="../Grammatik/kursnr.agl" />
+			<prompt bargein="false">
 				<audio src="../Dialogdesign/Audiofiles/kurs_info_01.wav">
 					Hallo. Um Informationen zu einem bestimmten Kurs zu erhalten, nennen Sie bitte die Kursnummer.
 				</audio>
 			</prompt>
 			<filled>
-				<assign name="classId" expr="'MM' + Kursnummer" />
+				<assign name="classId" expr="Kursnummer.kursnr" />
 				<goto next="#DeliverInfo" />
 			</filled>
 		</field>
