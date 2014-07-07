@@ -11,9 +11,7 @@
 			</script>
 			<assign name="timestamp" expr="date.getFullYear() + '-' + (date.getMonth()+1) + '-' + date.getDate() + 'T' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds()" />
 			<data name="callEnd" method="post" src="http://localhost:8080/reports/end" namelist="callId timestamp" />
-			<audio src="../Dialogdesign/Audiofiles/globals_04.wav">
-				Vielen Dank für die Nutzung des Informationssystems der THM. Auf Wiederhören.
-			</audio>
+			Vielen Dank fÃ¼r die Nutzung des Informationssystems der THM. Auf WiederhÃ¶ren.
 		</block>
 	</form>
 	
