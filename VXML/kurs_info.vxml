@@ -24,7 +24,8 @@
 				<!--audio src="http://localhost:8080/audios/kurs_info_02.wav" /-->
 				Bitte nennen Sie Ihre Matrikelnummer.
 			</prompt>
-			<prompt count="2"><!--audio src="http://localhost:8080/audios/kurs_info_03.wav" /-->
+			<prompt count="2">
+				<!--audio src="http://localhost:8080/audios/kurs_info_03.wav" /-->
 				Ihre Matrikelnummer steht auf Ihrem Studentenausweis. Bitte nennen Sie Ihre Matrikelnummer.
 			</prompt>
 			<nomatch>
@@ -39,13 +40,14 @@
 					<prompt>
 						Die Authentifizierung ist leider fehlgeschlagen.
 					</prompt>
-					<goto next="#GoodBye" />
+					<goto next="./good_bye.vxml" />
 				</if>
 			</filled>
 		</field>
 		<field name="Kursnummer">
 			<grammar src="builtin:dtmf/digits?minlength=2;maxlength=2" mode="dtmf"/>
-			<prompt><!--audio src="http://localhost:8080/audios/kurs_info_01.wav" /-->
+			<prompt>
+				<!--audio src="http://localhost:8080/audios/kurs_info_01.wav" /-->
 				Um Informationen zu einem bestimmten Kurs zu erhalten, nennen Sie bitte die Kursnummer.
 			</prompt>
 			<filled>
@@ -53,7 +55,23 @@
 				<goto next="#DeliverInfo" />
 			</filled>
 		</field>
-		<!-- goto next="ssml.vxml"/ -->
+	</form>
+	
+	<form id="DeliverInfo">
+		<data name="ClassInfo" src="http://localhost:8080/class" namelist="callId classId" />
+		<block>
+			<if cond="ClassInfo.status == 'ok'" >
+				<prompt>
+					Zum Kurs <value expr="ClassInfo.classTitle" /> liegen folgende Informationen vor.
+					<value expr="ClassInfo.description" />
+				</prompt>
+			<else />
+				<prompt>
+					Kurs <value expr="gKursnummer" /> existiert nicht in der Datenbank.
+				</prompt>
+			</if>
+			<goto next="#MoreInfo" />
+		</block>
 	</form>
 	
 </vxml>
