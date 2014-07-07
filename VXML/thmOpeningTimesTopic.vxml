@@ -11,19 +11,33 @@ application = "root.vxml">
 		
 			<form id="timeMultislots">
 				<field name="oeffnungszeiten">
-					<grammar src= "../Grammatik/oeffnungszeiten.agl#Allginfos" type="application/x-nuance-gsl"/>
+					<grammar src= "../Grammatik/oeffnungszeiten.agl#Oeffnungszeiten" type="application/x-nuance-gsl"/>
 					<prompt>
 						Bitte, wähle ein THM Standort.
 					</prompt>
 					<filled>
 					<assign name = "standort" expr = "oeffnungszeiten"></assign>
-						<prompt>
-							Ihre Wahl war
-							<value expr="lastresult$.utterance"/>. Die THM in
-							<value expr="standort"/>hat geöffnet
-							
-						</prompt>
 						
+							
+							<if cond = "standort == 'fb'">
+									<prompt>
+										Friedberg
+									</prompt>
+									
+									<elseif cond="standort == 'gi'" />
+									
+									<prompt>
+										Gießen
+									</prompt>
+									
+									<elseif cond="standort == 'wz'" />
+									
+									<prompt>
+										Wetzlar
+									</prompt>
+									
+							</if>
+							
 					</filled>
 				</field>
 			</form>
