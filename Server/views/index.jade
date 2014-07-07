@@ -1,0 +1,13 @@
+extends layout
+
+block content
+  div.jumbotron
+    h1 #{title}
+    p Welcome to #{title}
+    p You have #{logs.length} Logs
+
+  div.list-group
+    each log in logs
+        a.list-group-item
+            h4 #{log.id}
+            p.list-group-item-text #{log.event}

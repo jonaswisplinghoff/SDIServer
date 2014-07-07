@@ -1,6 +1,20 @@
-Auswahl:public (Wahl:w){<chichu $w>}
+Auswahl:public (Wahlmitdreck:w){<menu $w>}
+
+Wahlmitdreck [ (?Pregarbage [Wahl]  { return ($return) } ?Postgarbage) ]
 
 Wahl  [
-        kurs      {return ("kurs")}
-        infos      {return ("allgemein")}
+        Kurs
+        Infos
+				]
+				
+				
+Kurs [kurs (kursspezifische informationen) vorlesungen vorlesung kurse kursinfos kursinformationen ] {return ("kurs")}
+
+Infos [ infos informationen (allgemeine informationen) allgemein (allgemeine infos) auskunft  ] {return ("allgemein")}
+
+								
+Pregarbage [ bitte (ich moechte)
+				]
+				
+Postgarbage [ bitte 
 				]

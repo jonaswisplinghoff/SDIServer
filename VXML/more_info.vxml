@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<vxml xmlns="http://www.w3.org/2001/vxml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://www.w3.org/2001/vxml http://www.w3.org/TR/voicexml21/vxml.xsd" version="2.1" xml:lang="de-DE">
+	
+	<form id="MoreInfo">
+		<field name="callerWantsMoreInfo">
+			<grammar src="builtin:grammar/boolean" />
+			<prompt>
+				<!--audio src="http://localhost:8080/audios/more_info_01.wav" /-->
+				Möchten Sie weitere allgemeine Informationen oder Informationen zu einem bestimmten Kurs erhalten?
+			</prompt>
+			<filled>
+				<if cond="callerWantsMoreInfo == 'true'">
+					<goto next="./menu.vxml" />
+				<else />
+					<goto next="./good_bye.vxml" />
+				</if>
+			</filled>
+		</field>
+	</form>
+	
+</vxml>

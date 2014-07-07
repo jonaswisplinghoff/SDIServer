@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<vxml xmlns="http://www.w3.org/2001/vxml"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.w3.org/2001/vxml http://www.w3.org/TR/voicexml21/vxml.xsd"
+version="2.1" xml:lang="de-DE">
+	<!-- **************************************************************************** -->
+		
+		
+			<form id="lectureMultislots">
+				<field name="LectureTimes">
+					<grammar src="Grammar/lectureTimes.gsl#LECTURE_TIMES" type="application/x-nuance-gsl"/>
+					<prompt>
+						In welchem Semester bist du?
+					</prompt>
+					<filled>
+						<prompt>
+							Deine Wahl war
+							<value expr="lastresult$.utterance"/>.Semester Im 
+							<value expr="lastresult$.interpretation.semester"/>gelten folgende Vorlesungszeiten
+							<value expr="lastresult$.interpretation.vorlesungszeiten"/>.
+						</prompt>						
+					</filled>
+				</field>
+			</form>
+		</vxml>
