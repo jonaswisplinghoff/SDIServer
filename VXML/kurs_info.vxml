@@ -70,7 +70,7 @@
 					Kurs <value expr="gKursnummer" /> existiert nicht in der Datenbank.
 				</prompt>
 			</if>
-			<goto next="#MoreInfo" />
+			<goto next="./more_info.vxml" />
 		</block>
 	</form>
 	
