@@ -115,8 +115,8 @@ app.get('/', function(req, res) {
 	});
 });
 
-app.post('/reports/start', function (req, res) {
-   console.log('POST /reports/start callId: ' + req.query.callId + ' timestamp: ' + req.query.timestamp + ' ani: ' + req.query.ani);
+app.get('/reports/start', function (req, res) {
+   console.log('GET /reports/start callId: ' + req.query.callId + ' timestamp: ' + req.query.timestamp + ' ani: ' + req.query.ani);
    var response = {};
       
    if(typeof req.query.callId != "undefined" && 
@@ -158,8 +158,8 @@ app.post('/reports/start', function (req, res) {
    }
 });
 
-app.post('/reports/menu', function (req, res) {
-   console.log('POST /reports/menu callId: ' + req.query.callId + ' timestamp: ' + req.query.timestamp + ' choice: ' + req.query.choice);
+app.get('/reports/menu', function (req, res) {
+   console.log('GET /reports/menu callId: ' + req.query.callId + ' timestamp: ' + req.query.timestamp + ' choice: ' + req.query.choice);
    res.contentType = 'json';
    var response = {};
 
@@ -187,8 +187,8 @@ app.post('/reports/menu', function (req, res) {
    }
 });
 
-app.post('/reports/end', function (req, res) {
-   console.log('POST /reports/end callId: ' + req.query.callId + ' timestamp: ' + req.query.timestamp);
+app.get('/reports/end', function (req, res) {
+   console.log('GET /reports/end callId: ' + req.query.callId + ' timestamp: ' + req.query.timestamp);
    res.contentType = 'json';
    var response = {};
 
