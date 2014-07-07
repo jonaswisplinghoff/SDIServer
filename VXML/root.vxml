@@ -5,7 +5,6 @@ version="2.1" xml:lang="de-DE">
 
 	<var name="ani" />
 	<var name="callId" />
-	<var name="timestamp" />
 	<var name="gName" />
 	<var name="standort" />
 	

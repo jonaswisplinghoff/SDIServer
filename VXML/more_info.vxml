@@ -6,8 +6,9 @@
 		<field name="callerWantsMoreInfo">
 			<grammar src="builtin:grammar/boolean" />
 			<prompt>
-				<!--audio src="http://localhost:8080/audios/more_info_01.wav" /-->
-				MÃ¶chten Sie weitere allgemeine Informationen oder Informationen zu einem bestimmten Kurs erhalten?
+				<audio src="../Dialogdesign/Audiofiles/more_info_01.wav" >
+					Möchten Sie weitere allgemeine Informationen oder Informationen zu einem bestimmten Kurs erhalten?
+				</audio>
 			</prompt>
 			<filled>
 				<if cond="callerWantsMoreInfo == 'true'">

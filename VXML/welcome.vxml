@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<vxml xmlns="http://www.w3.org/2001/vxml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3.org/2001/vxml http://www.w3.org/TR/voicexml21/vxml.xsd" version="2.1" xml:lang="de-DE">
+<vxml xmlns="http://www.w3.org/2001/vxml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://www.w3.org/2001/vxml http://www.w3.org/TR/voicexml21/vxml.xsd" 
+	version="2.1" xml:lang="de-DE" xml:base="." application="./root.vxml">
 	
-	<var name="ani" />
-	<var name="callId" />
-	<var name="timestamp" />
-	<var name="gName" />
-	
-	<form id="Welcome">
+		<var name="timestamp" />
+
+		<form id="Welcome">
 		<block>
 			<script>
 				var date= new Date();
@@ -15,7 +14,7 @@
 			<assign name="ani" expr="'0' + ani" />	
 			<assign name="timestamp" expr="date.getFullYear() + '-' + (date.getMonth()+1) + '-' + date.getDate() + 'T' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds()" />
 			<assign name="callId" expr="ani + date.getFullYear() + (date.getMonth()+1) + date.getDate() + date.getHours() + date.getMinutes() + date.getSeconds()" />
-			<data name="callStart" method="post" src="http://localhost:8080/reports/start" namelist="callId timestamp ani" />
+			<data name="callStart" src="http://localhost:8080/reports/start" namelist="callId timestamp ani" />
 			<assign name="gName" expr="callStart.name" />
 			<prompt  bargein="false">
 				<audio src="../Dialogdesign/Audiofiles/welcome_02.wav">
@@ -24,7 +23,6 @@
 					Mittels ihrer Matrikelnummer erhalten Sie kursspezifische Informationen.
 				</audio>
 			</prompt>
-			
 			<goto next="./menu.vxml" />
 		</block>
 	</form>
