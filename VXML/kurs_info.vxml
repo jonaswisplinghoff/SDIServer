@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <vxml xmlns="http://www.w3.org/2001/vxml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-	xsi:schemaLocation="http://www.w3.org/2001/vxml http://www.w3.org/TR/voicexml21/vxml.xsd" version="2.1" xml:lang="de-DE">
+	xsi:schemaLocation="http://www.w3.org/2001/vxml http://www.w3.org/TR/voicexml21/vxml.xsd" 
+	version="2.1" xml:lang="de-DE" xml:base="." application="./welcome.vxml">
 	
-	<var name="classId" />
+	<!--var name="classId" />
 	<var name="callId" />
 	<var name="timestamp" />
 	<var name="choice" />
-	<var name="gName" />
-	
+	<var name="gName" /-->
+		
 	<form id="kurs">
 		<block>
 			<script>
@@ -15,7 +16,7 @@
 			</script>
 			<assign name="timestamp" expr="date.getFullYear() + '-' + (date.getMonth()+1) + '-' + date.getDate() + 'T' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds()" />		
 			<assign name="choice" expr="'kurs'" />
-			<data name="menuChoice" method="post" src="http://localhost:8080/reports/menu" namelist="callId timestamp choice" />
+			<data name="menuChoice" src="http://localhost:8080/reports/menu" namelist="callId timestamp choice" />
 		</block>
 		<field name="matrikelnummer" cond="gName.length == 0">
 			<!--grammar src="./matrikel.agl" /-->
