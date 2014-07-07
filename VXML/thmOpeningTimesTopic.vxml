@@ -8,7 +8,7 @@ version="2.1" xml:lang="de-DE">
 		
 			<form id="timeMultislots">
 				<field name="OpeningTimes">
-					<grammar src="../Grammar/openingTimes.gsl#THM_TIMES" type="application/x-nuance-gsl"/>
+					<grammar src="Grammar/openingTimes.gsl#THM_TIMES" type="application/x-nuance-gsl"/>
 					<prompt>
 						Bitte, wähle ein THM Standort.
 					</prompt>

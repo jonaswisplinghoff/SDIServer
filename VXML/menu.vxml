@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<vxml xmlns="http://www.w3.org/2001/vxml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3.org/2001/vxml http://www.w3.org/TR/voicexml21/vxml.xsd" version="2.1" xml:lang="de-DE">
+<vxml xmlns="http://www.w3.org/2001/vxml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.w3.org/2001/vxml http://www.w3.org/TR/voicexml21/vxml.xsd" version="2.1" 
+xml:lang="de-DE">
 	
 	<menu id="Menu">
-		<!--grammar src="./menu.agl" /-->
-		<prompt bargein="false"><!-- audio src="../prompts/menue.wav" / -->
-			<!-- Möchten Sie allgemeine Informationen drücken Sie die Taste 1 oder sagen Sie Allgemein.
-			Möchten Sie Kursinformationen drücken Sie die Taste 2 oder sagen Sie Kurs. -->
-			Für allgemeine Informationen sagen Sie bitte INFOS.
-			Um kurspezifische Informationen zu erhalten sagen Sie bitte KURS.
+		<prompt bargein="false">
+			<audio src="../Dialogdesign/Audiofiles/menu_01.wav">
+				Für allgemeine Informationen sagen Sie bitte INFOS.
+				Um kurspezifische Informationen zu erhalten sagen Sie bitte KURS.
+			</audio>
 		</prompt>
 		<choice dtmf="1" next="./menu_info.vxml">
 			Allgemein
 		</choice>
-		<choice dtmf="2" next="#check-ani">
+		<choice dtmf="2" next="./kurs_info.vxml">
 			Kurs
 		</choice>
 	</menu>

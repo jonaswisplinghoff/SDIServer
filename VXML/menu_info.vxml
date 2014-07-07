@@ -7,11 +7,15 @@
 	<!-- **************************************************************************** -->
 		<property name="bargein" value="true"/>
 		<property name="confidencelevel" value="0.5" />
+		
 			<menu id="menu">
+		
 				<prompt bargein="true">
-					Quelle Text Hauptmenü 
+					Mit was möchten Sie verbunden werden?
 				</prompt>
+			
 				<choice dtmf="1" next="#choice1">
+				<grammar src="../Grammatik/allginfos.agl#Allginfos" type="application/x-nuance-gsl"/>
 					Öffnungszeiten der THM 
 				</choice>
 				<choice dtmf="2" next="#choice2">
@@ -26,11 +30,12 @@
 				<choice dtmf="5" next="#choice5">
 					Information zum THM Sport 
 				</choice>
+			
 			</menu>
 			<form id="choice1">
 				<block>
 					<prompt>
-						<audio src="... " />THM Öffnungszeiten: 
+						<audio src="... " /> THM Öffnungszeiten: 
 					</prompt>
 					<goto next="thmOpeningTimesTopic.vxml"/>
 				</block>
@@ -38,15 +43,16 @@
 			<form id="choice2">
 				<block>
 					<prompt>
-						<audio src="..." />Vorlesungszeiten 
+						<!--<audio src="..." /> Vorlesungszeiten -->
+					
 					</prompt>
-					<goto next="lectureTimesTopic.vxml"/>
+						<goto next="lectureTimesTopic.vxml"/>
 				</block>
 			</form>
 			<form id="choice3">
 				<block>
 					<prompt>
-						<audio src="..." />Bücherei Öffnungszeiten 
+						<!--<audio src="..." />Bücherei Öffnungszeiten -->
 					</prompt>
 					<goto next="libraryTimesTopic.vxml"/>
 				</block>
@@ -69,4 +75,5 @@
 					<disconnect/>
 				</block>
 			</form>
+		
 		</vxml>
