@@ -17,7 +17,7 @@
 			<assign name="callId" expr="ani + date.getFullYear() + (date.getMonth()+1) + date.getDate() + date.getHours() + date.getMinutes() + date.getSeconds()" />
 			<data name="callStart" method="post" src="http://localhost:8080/reports/start" namelist="callId timestamp ani" />
 			<assign name="gName" expr="callStart.name" />
-			<prompt>
+			<prompt  bargein="false">
 				<audio src="../Dialogdesign/Audiofiles/welcome_02.wav">
 					Herzlich Willkommen beim Informationssystem der THM.
 					Mithilfe dieses Systems können Sie allgmeine Informationen der THM abrufen.
