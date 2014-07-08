@@ -67,34 +67,9 @@ var Log = db.define('log', {
 
 // !SETUP DATABASE
 
-db.drop(function(){
-	Student.sync(function(){
-		var newStudent ={};
-		newStudent.name = "Max";
-		newStudent.surname = "Mustermann";
-		newStudent.matrikelnummer = "123456";
-		newStudent.ani = "0800111111";
-		Student.create(newStudent, function(err, results){
-			if (err) {
-		    	console.log("Something is wrong with the student creation", err);
-		    	return;
-			}
-		});
-	});
-	Course.sync(function(){
-		var newCourse = {};
-		newCourse.classId = "MM14";
-		newCourse.classTitle = "Konzeption von Sprachdialogsystemen und Realisierung von Sprachportalen";
-		newCourse.classDescription = "Vorlesung: Architektur und Komponenten von Voice Plattformen (Voice Engines und Prozesse), Konzeptionierung eines Voice-User-Interfaces (Dialogstrukturen, Prompting und Persona Design), Dialog Implementierung (VoiceXML, Grammatikerstellung, Audioaufbereitung) Konzeption und Aufbau eines Sprachportals, Dynamische Dialoge mit Content aus Datenbank, Planung und Management von Sprachprojekten Ausblick auf multimodale Interaktionssysteme. Praktikum: Programmierung eines Sprachdialogs in VoiceXML; Realisierung eines Sprachportals mit dynamischen Content aus Datenbank.";
-		Course.create(newCourse, function(err, results){
-			if (err) {
-		    	console.log("Something is wrong with the course creation", err);
-		    	return;
-			}
-		});
-	});
+	Student.sync(function(){});
+	Course.sync(function(){});
     Log.sync(function(){});
-}); 
 
 
 
