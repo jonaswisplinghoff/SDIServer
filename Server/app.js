@@ -108,12 +108,9 @@ app.set('view engine', 'jade');
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', function(req, res) {
-	
-	response = [];
-	callCount = 0;
-	currentCall = 0;
-	
-	tryToSendResponse = function(err){
+		
+	tryToSendResponse = function(err, results){
+		response = results;
 		res.render('index', { title: 'THM Sprachportal Server', logs: response });
 		console.log('Response sent!');
 		console.log(response);
@@ -129,7 +126,7 @@ app.get('/', function(req, res) {
 		console.log('Data: ' + JSON.stringify(data));
 		
 		getCallJSON = function(data, callback){
-			call = {};
+			var call = {};
 			call.callId = data.callId;
 			console.log('CallId set: ' + call.callId);
 							
@@ -182,15 +179,15 @@ app.get('/', function(req, res) {
 							call.menus = menus;
 							
 							console.log('Full Call: ' + JSON.stringify(call));
-							response.push(call);
-							callback();
+							
+							callback(null, call);
 						});
 					});
 				});
 			});
 		}
 		
-		async.each(data, getCallJSON, tryToSendResponse);
+		async.map(data, getCallJSON, tryToSendResponse);
 	});		
 });
 
