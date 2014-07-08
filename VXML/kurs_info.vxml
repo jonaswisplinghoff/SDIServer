@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <vxml xmlns="http://www.w3.org/2001/vxml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xsi:schemaLocation="http://www.w3.org/2001/vxml http://www.w3.org/TR/voicexml21/vxml.xsd" 
-	version="2.1" xml:lang="de-DE" xml:base="." application="./welcome.vxml">
+	version="2.1" xml:lang="de-DE" xml:base="." application="./root.vxml">
 	
-	<!--var name="classId" />
-	<var name="callId" />
+	<var name="classId" />
 	<var name="timestamp" />
 	<var name="choice" />
-	<var name="gName" /-->
 		
 	<form id="kurs">
 		<block>
@@ -18,16 +16,16 @@
 			<assign name="choice" expr="'kurs'" />
 			<data name="menuChoice" src="http://localhost:8080/reports/menu" namelist="callId timestamp choice" />
 		</block>
-		<field name="matrikelnummer" cond="gName.length == 0">
-			<!--grammar src="./matrikel.agl" /-->
-			<grammar src="builtin:dtmf/digits?minlength=6;maxlength=6" mode="dtmf"/>
-			<prompt count="1">
-				<!--audio src="http://localhost:8080/audios/kurs_info_02.wav" /-->
-				Bitte nennen Sie Ihre Matrikelnummer.
+		<field name="matrikelnummer" cond="gName.length == 0" type="digits?minlength=6;maxlength=6">
+			<prompt count="1" bargein="false">
+				<audio src="../Dialogdesign/Audiofiles/kurs_info_02.wav">
+					Bitte nennen Sie Ihre Matrikelnummer.
+				</audio>
 			</prompt>
-			<prompt count="2">
-				<!--audio src="http://localhost:8080/audios/kurs_info_03.wav" /-->
-				Ihre Matrikelnummer steht auf Ihrem Studentenausweis. Bitte nennen Sie Ihre Matrikelnummer.
+			<prompt count="2" bargein="false">
+				<audio src="../Dialogdesign/Audiofiles/kurs_info_03.wav">
+					Ihre Matrikelnummer finden sie auf Ihrem Studentenausweis. Bitte nennen Sie Ihre Matrikelnummer.
+				</audio>
 			</prompt>
 			<nomatch>
 				<reprompt/>
@@ -38,21 +36,19 @@
 			<filled>
 				<data name="checkMatrikelnummer" src="http://localhost:8080/matrikelnummer" namelist="callId matrikelnummer" />
 				<if cond="checkMatrikelnummer.name.length == 0" >
-					<prompt>
-						Die Authentifizierung ist leider fehlgeschlagen.
-					</prompt>
 					<goto next="./good_bye.vxml" />
 				</if>
 			</filled>
 		</field>
 		<field name="Kursnummer">
-			<grammar src="builtin:dtmf/digits?minlength=2;maxlength=2" mode="dtmf"/>
-			<prompt>
-				<!--audio src="http://localhost:8080/audios/kurs_info_01.wav" /-->
-				Um Informationen zu einem bestimmten Kurs zu erhalten, nennen Sie bitte die Kursnummer.
+			<grammar src="../Grammatik/kursnr.agl" />
+			<prompt bargein="false">
+				<audio src="../Dialogdesign/Audiofiles/kurs_info_01.wav">
+					Hallo. Um Informationen zu einem bestimmten Kurs zu erhalten, nennen Sie bitte die Kursnummer.
+				</audio>
 			</prompt>
 			<filled>
-				<assign name="classId" expr="'MM' + Kursnummer" />
+				<assign name="classId" expr="Kursnummer.kursnr" />
 				<goto next="#DeliverInfo" />
 			</filled>
 		</field>
@@ -68,7 +64,7 @@
 				</prompt>
 			<else />
 				<prompt>
-					Kurs <value expr="gKursnummer" /> existiert nicht in der Datenbank.
+					Kurs <value expr="classId" /> existiert nicht in der Datenbank.
 				</prompt>
 			</if>
 			<goto next="./more_info.vxml" />

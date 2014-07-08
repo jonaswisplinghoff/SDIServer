@@ -4,20 +4,18 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xsi:schemaLocation="http://www.w3.org/2001/vxml http://www.w3.org/TR/voicexml21/vxml.xsd"
 version="2.1" xml:lang="de-DE">		
 
-<!-- db zugriff? ort-variable aus Menu_Info main? -->
-
-	<script>
-		<![CDATA[
-		function sportDate(x) {
-			return "01.08.2014";//db.getSportDate(ort);
-		}
-		]]>
-	</script>
-	
 	<form id="thmSports">
 		<field name="sportStart">					
-			<prompt> <!-- <audio src="../prompts/menu_info_15.wav" /> -->
-				Ab <value expr="sportDate(ort)"/> starten die ersten Sportangebote des Sportprogramms für <value expr="ort"/>.
+			<prompt> 
+				<audio src="../Dialogdesign/Audiofiles/menu_info_15.wav" >
+					Am 22. April 2014 starten die ersten Sportangebote des Sportprogramms für das Sommersemester 2014.
+					In Schulsporthallen beginnen die Kurse ab dem 28. April 2014.
+				</audio>
+			</prompt>
+			<prompt> 
+				<audio src="../Dialogdesign/Audiofiles/menu_info_16.wav" >
+					Die Sportkurse enden am 18. Juli 2014.
+				</audio>
 			</prompt>
 		</field>
 		<block>

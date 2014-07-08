@@ -7,12 +7,34 @@ version="2.1" xml:lang="de-DE">
 		
 		
 			<form id="lectureMultislots">
-				<field name="LectureTimes">
-					<grammar src="Grammar/lectureTimes.gsl#LECTURE_TIMES" type="application/x-nuance-gsl"/>
+				<field name="vorlesungszeiten">
+					<grammar src="../Grammatik/vorlesungszeiten.agl#Vorlesungszeiten" type="application/x-nuance-gsl"/>
 					<prompt>
-						In welchem Semester bist du?
+						Für welches Semester benötigen Sie die Vorlesungszeiten? Nennen Sie zunächst [Sommersemester] oder [Wintersemester]
 					</prompt>
-					<filled>
+					<audio src="../Dialogdesign/Audiofiles/menu_info_07.wav" />
+					<filled mode="voice">
+					<if cond="vorlesungszeiten=='ws'">
+						<prompt>Wintersemester</prompt>
+						<elseif cond="vorlesungszeiten=='ss'">
+							<prompt>Sommersemester</prompt>
+						</elseif>
+					</if>
+					<promt>
+					Nennen Sie jetzt bitte das Jahr.
+					</promt>
+					<audio></audio>
+				</field>
+				<block>
+					<goto next="moreInfo.vxml" />
+				</block>
+			</form>
+		</vxml>
+		
+		
+		
+		<!-- 
+		<filled>
 						<prompt>
 							Deine Wahl war
 							<value expr="lastresult$.utterance"/>.Semester Im 
@@ -20,6 +42,4 @@ version="2.1" xml:lang="de-DE">
 							<value expr="lastresult$.interpretation.vorlesungszeiten"/>.
 						</prompt>						
 					</filled>
-				</field>
-			</form>
-		</vxml>
+					-->
