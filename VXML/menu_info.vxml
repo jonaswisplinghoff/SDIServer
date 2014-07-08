@@ -5,57 +5,60 @@
 	<var name="gCallerPhone" />
 	
 	<!-- **************************************************************************** -->
-		<property name="bargein" value="false"/>
-		<property name="confidencelevel" value="0.3" />
+	<!-- ****todo: audios einbinden, auf tasten reagieren (dtmf)********************* -->
+	
+	<property name="bargein" value="false"/>
+	<property name="confidencelevel" value="0.3" />
 		
-				<form id="menu">
+	<form id="menu">					
+		<field name="allginfos">
+			<grammar src="../Grammatik/allginfos.agl#Allginfos" type="application/x-nuance-gsl"/>
+			<prompt bargein="false">
+				<audio src="../Dialogdesign/Audiofiles/menu_info_01.wav">
+					Bitte wählen Sie aus einem der folgenden Menüpunkte aus.
+				</audio>
+				<audio src="../Dialogdesign/Audiofiles/menu_info_02.wav">
+					Drücken Sie [#] um direkt mit einem Mitarbeiter im Sekretariat verbunden zu werden.
+				</audio>
+			</prompt>
+			<filled mode="all"> <!-- http://cafe.bevocal.com/docs/vxml/if.html grammatik dtmf ?! -->
+				<if cond="allginfos=='Sekretariat' || allginfos=='dtmf-1'">
 				
+					<goto next="#sekretariat"/>
 					
-				<field name="allginfos">
-					<grammar src="../Grammatik/allginfos.agl#Allginfos" type="application/x-nuance-gsl"/>
-						<prompt  bargein="false">
-						Mit was möchten Sie verbunden werden?
-						</prompt>
-						<filled>	
-								
-								<if cond="allginfos=='Sekretariat'">
-									
-									<goto next="#sekretariat"/>
-									
-								<elseif cond="allginfos=='Oeffnungszeiten'" />
-									
-									<goto next="thmOpeningTimesTopic.vxml"/>
-								
-								<elseif cond="allginfos=='Vorlesungszeiten'" />
-									
-									<goto next="thmOpeningTimesTopic.vxml"/>
-								
-								<elseif cond="allginfos=='Bibliothek'" />
-								
-									<goto next="thmOpeningTimesTopic.vxml"/>
-								
-								<elseif cond="allginfos=='Mensa'" />
-								
-									<goto next="thmOpeningTimesTopic.vxml"/>
-								
-								<elseif cond="allginfos=='Sport'" />
-								
-									<goto next="thmOpeningTimesTopic.vxml"/>
-								</if>
-						</filled>
+					<elseif cond="allginfos=='Oeffnungszeiten'" />
 					
-				</field>
-				  <noinput count="1">
-						Ich habe Sie nicht verstanden. Bitte sprechen sie etwas lauter.
-                <reprompt/>		
-          </noinput>
-					 <noinput count="2">
-						Bitte wiederholen Sie Ihre Aussage. Ich habe nichts verstanden. 
-                <reprompt/>		
-          </noinput>
-				</form>
+						<goto next="thmOpeningTimesTopic.vxml"/>
+
+					<elseif cond="allginfos=='Vorlesungszeiten'" />
+									
+						<goto next="lectureTimesTopic.vxml"/>
+								
+					<elseif cond="allginfos=='Bibliothek'" />
+								
+						<goto next="libraryTimesTopic.vxml"/>
+								
+					<elseif cond="allginfos=='Mensa'" />
+								
+						<goto next="canteenTimesTopic.vxml"/>
+								
+					<elseif cond="allginfos=='Sport'" />
+								
+						<goto next="thmSports.vxml"/>
+				</if>
+			</filled>					
+		</field>
+			<noinput count="1">
+				Ich habe Sie nicht verstanden. Bitte sprechen sie etwas lauter.
+            <reprompt/>		
+            </noinput>
+			<noinput count="2">
+				Bitte wiederholen Sie Ihre Aussage. Ich habe nichts verstanden. 
+            <reprompt/>		
+            </noinput>
+	</form>
 				
-				<form id="sekretariat">
+	<form id="sekretariat">
 		<field name="sekretariat">
 			<prompt>Sie werden in Kürze mit dem Sekretariat verbunden</prompt>
 		</field>
@@ -117,15 +120,7 @@
 	 
 	 <form id="mensa">
 	 <field name="mensa">
-		<prompt>Sie haben Mensa gewählt.
-		</prompt>
-	 </field>
-	 </form>
-	 
-	 <form id="sport">
-	 <field name="sport">
-		<prompt>Sie haben Hochschulsport gewählt.
-		</prompt>
+		<prompt>Sie haben Mensa gewählt.</prompt>
 	 </field>
 	 </form>
 	 
