@@ -1,5 +1,6 @@
 var express = require('express');
 var path = require('path');
+var async = require('async');
 
 var db = require('./db');
 
@@ -13,6 +14,9 @@ var Student = db.define('student', {
   methods : {
     getFullName: function () {
       return this.name + " " + this.surname;
+    },
+    getMatrikelnummer: function () {
+	  return this.matrikelnummer;
     }
   }
 });
@@ -42,7 +46,8 @@ var Log = db.define('log', {
 	callId	: { type: "number"},
 	timestamp: { type: "date", time: true },
 	event: { type: "enum", values: [ "start", "menu", "end" ] },
-	choice: String
+	choice: String,
+	ani: String
 }, {
 	methods:{
 		getCallId: function(){
@@ -61,6 +66,7 @@ var Log = db.define('log', {
 });
 
 // !SETUP DATABASE
+
 
 db.drop(function(){
 	Student.sync(function(){
@@ -92,6 +98,7 @@ db.drop(function(){
 }); 
 
 
+
 var app = express();
 
 // view engine setup
@@ -101,18 +108,90 @@ app.set('view engine', 'jade');
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', function(req, res) {
-  Log.all({}, function(err, logs) {
- 		if (err) {
-	    	console.log("Something is wrong with the connection", err);
-	    	return;
+	
+	response = [];
+	callCount = 0;
+	currentCall = 0;
+	
+	tryToSendResponse = function(err){
+		res.render('index', { title: 'THM Sprachportal Server', logs: response });
+		console.log('Response sent!');
+		console.log(response);
+	}
+	
+	db.driver.execQuery("SELECT DISTINCT callId FROM sdi.log;", function (err, data) {
+		
+		if (err) {
+			console.log("Something is wrong with the connection", err);
+			return;
 		}
 		
-		var response = logs;
+		console.log('Data: ' + JSON.stringify(data));
 		
-		var exampleResponse = [{id: 1, name: "test1"}, {id: 2, name: "test2"}, {id: 3, name: "test3"}, {id: 4, name: "test4"}];
+		getCallJSON = function(data, callback){
+			call = {};
+			call.callId = data.callId;
+			console.log('CallId set: ' + call.callId);
+							
+			Log.find({callId: call.callId, event : "start"}, 1, function (err, logs){
+				
+				if(logs.length !=0){
+					call.start = logs[0].timestamp;
+					call.ani = logs[0].ani;
+				}
+				else{
+					call.start = "";
+					call.ani = "";
+				}
+				console.log('Start set: ' + call.start);
+				console.log('Ani set: ' + call.ani );
+
+				Student.find({ani: call.ani},1, function (err, student) {
+					if(student.length !=0){
+						call.matrikelnummer = student[0].getMatrikelnummer();
+						call.name = student[0].getFullName();
+					}
+					else{
+						call.matrikelnummer = "";
+						call.name = "";
+					}
+					console.log('Matrikelnummer set: ' + call.matrikelnummer);
+					console.log('Name set: ' + call.name)
+				
+					Log.find({callId: call.callId, event : "end"}, 1, function (err, logs){
+						
+						if(logs.length != 0){
+							call.end = logs[0].timestamp;
+						}
+						else{
+							call.end = "";
+						}
+						console.log('End set: ' + call.end);
+						
+						Log.find({callId: call.callId, event : "menu"}, {}, function (err, logs){
+	
+							menus = [];
+							for(var j=0; j<logs.length; j++){
+								var choice = {};
+								
+								choice.timeStamp = logs[j].timestamp;
+								choice.choice = logs[j].choice;
+								
+								menus.push(choice);
+							}							
+							call.menus = menus;
+							
+							console.log('Full Call: ' + JSON.stringify(call));
+							response.push(call);
+							callback();
+						});
+					});
+				});
+			});
+		}
 		
-		res.render('index', { title: 'THM Sprachportal Server', logs: response });
-	});
+		async.each(data, getCallJSON, tryToSendResponse);
+	});		
 });
 
 app.get('/reports/start', function (req, res) {
@@ -127,6 +206,7 @@ app.get('/reports/start', function (req, res) {
 	   	newLog.callId = req.query.callId;
 	   	newLog.timestamp = req.query.timestamp;
 	   	newLog.event = "start";
+	   	newLog.ani = req.query.ani;
 	   	Log.create(newLog, function(err, results) {
 			if (err) {
 		    	console.log("Something is wrong with the log creation", err);
