@@ -67,7 +67,6 @@ var Log = db.define('log', {
 
 // !SETUP DATABASE
 
-
 db.drop(function(){
 	Student.sync(function(){
 		var newStudent ={};
@@ -109,29 +108,22 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', function(req, res) {
 		
-	tryToSendResponse = function(err, results){
-		response = results;
-		res.render('index', { title: 'THM Sprachportal Server', logs: response });
-		console.log('Response sent!');
-		console.log(response);
+	sendResponse = function(err, results){
+		console.log("GET /   data: " + JSON.stringify(results));
+		res.render('index', { title: 'THM Sprachportal Server', logs: results });
 	}
 	
 	db.driver.execQuery("SELECT DISTINCT callId FROM sdi.log;", function (err, data) {
-		
 		if (err) {
 			console.log("Something is wrong with the connection", err);
 			return;
 		}
-		
-		console.log('Data: ' + JSON.stringify(data));
-		
+				
 		getCallJSON = function(data, callback){
 			var call = {};
 			call.callId = data.callId;
-			console.log('CallId set: ' + call.callId);
 							
 			Log.find({callId: call.callId, event : "start"}, 1, function (err, logs){
-				
 				if(logs.length !=0){
 					call.start = logs[0].timestamp;
 					call.ani = logs[0].ani;
@@ -140,8 +132,6 @@ app.get('/', function(req, res) {
 					call.start = "";
 					call.ani = "";
 				}
-				console.log('Start set: ' + call.start);
-				console.log('Ani set: ' + call.ani );
 
 				Student.find({ani: call.ani},1, function (err, student) {
 					if(student.length !=0){
@@ -152,21 +142,16 @@ app.get('/', function(req, res) {
 						call.matrikelnummer = "";
 						call.name = "";
 					}
-					console.log('Matrikelnummer set: ' + call.matrikelnummer);
-					console.log('Name set: ' + call.name)
 				
 					Log.find({callId: call.callId, event : "end"}, 1, function (err, logs){
-						
 						if(logs.length != 0){
 							call.end = logs[0].timestamp;
 						}
 						else{
 							call.end = "";
 						}
-						console.log('End set: ' + call.end);
 						
 						Log.find({callId: call.callId, event : "menu"}, {}, function (err, logs){
-	
 							menus = [];
 							for(var j=0; j<logs.length; j++){
 								var choice = {};
@@ -177,9 +162,7 @@ app.get('/', function(req, res) {
 								menus.push(choice);
 							}							
 							call.menus = menus;
-							
-							console.log('Full Call: ' + JSON.stringify(call));
-							
+														
 							callback(null, call);
 						});
 					});
@@ -187,7 +170,7 @@ app.get('/', function(req, res) {
 			});
 		}
 		
-		async.map(data, getCallJSON, tryToSendResponse);
+		async.map(data, getCallJSON, sendResponse);
 	});		
 });
 
