@@ -1,21 +1,47 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<vxml xmlns="http://www.w3.org/2001/vxml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-  xsi:schemaLocation="http://www.w3.org/2001/vxml http://www.w3.org/TR/voicexml21/vxml.xsd" 
-	version="2.1" xml:lang="de-DE" xml:base="." application="./root.vxml">
+<vxml xmlns="http://www.w3.org/2001/vxml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3.org/2001/vxml http://www.w3.org/TR/voicexml21/vxml.xsd" version="2.1" xml:lang="de-DE" xml:base="." application="./root.vxml">
+
+<var name = "allginfosVar" expr = "'menu_info2.vxml'"/>
 	
-	<menu id="Menu">
-		<prompt bargein="false">
-			<audio src="../Dialogdesign/Audiofiles/menu_01.wav">
-				Für allgemeine Informationen sagen Sie bitte INFOS.
-				Um kurspezifische Informationen zu erhalten sagen Sie bitte KURS.
-			</audio>
-		</prompt>
-		<choice dtmf="1" next="./menu_info.vxml">
-			Allgemein
-		</choice>
-		<choice dtmf="2" next="./kurs_info.vxml">
-			Kurs
-		</choice>
-	</menu>
-	
+	<!--
+	<property bargein="False"/>-->
+<form id="allginfos">
+	<grammar src= "../Grammatik/menu.agl#Auswahl" type="application/x-nuance-gsl"/>
+	<property name="confidence" value="0.2" />
+		<field name="menu">
+			<prompt>
+				<audio src="../Dialogdesign/Audiofiles/menu_01.wav">
+					Für allgemeine Informationen sagen Sie bitte INFOS. Um kurspezifische Informationen zu erhalten sagen Sie bitte KURS. 
+				</audio>
+			</prompt>
+			<filled>
+				<prompt>
+					Sie haben
+					<value expr="menu"/>gewählt. 
+				</prompt>
+			
+			</filled>
+		</field>
+		<block>
+			<if cond="menu=='kurs'">
+				<goto next="./kurs_info.vxml"/>
+				<elseif cond="menu=='allgemein'"/>
+				<prompt>
+					Sie werden nun weitergeleitet
+				</prompt>
+				<goto expr = "allginfosVar" />
+				<!-- "next= "menu_info.vxml#menu"" -->
+			</if>
+		</block>
+		<noinput count="1">
+			Bitte sprechen sie etwas lauter. 
+			<reprompt/>
+		</noinput>
+		<noinput count="2">
+			Mann, ich höre nichts! 
+			<reprompt/>
+		</noinput>
+	</form>
+	<form>
+</form>
 </vxml>

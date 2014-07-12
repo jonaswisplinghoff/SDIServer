@@ -1,207 +1,165 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<vxml xmlns="http://www.w3.org/2001/vxml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3.org/2001/vxml http://www.w3.org/TR/voicexml21/vxml.xsd" version="2.1" xml:lang="de-DE">
-	
-	<var name="gParticipantPhone" />
-	<var name="gCallerPhone" />
-	
-	<!-- **************************************************************************** -->
-	<!-- ****todo: audios einbinden, auf tasten reagieren (dtmf)********************* -->
-	
-	<property name="bargein" value="false"/>
-	<property name="confidencelevel" value="0.3" />
-		
-	<form id="menu">					
-		<field name="allginfos">
-			<grammar src="../Grammatik/allginfos.agl#Allginfos" type="application/x-nuance-gsl"/>
-			<prompt bargein="false">
-				<audio src="../Dialogdesign/Audiofiles/menu_info_01.wav">
-					Bitte wählen Sie aus einem der folgenden Menüpunkte aus.
-				</audio>
-				<audio src="../Dialogdesign/Audiofiles/menu_info_02.wav">
-					Drücken Sie [#] um direkt mit einem Mitarbeiter im Sekretariat verbunden zu werden.
-				</audio>
-			</prompt>
-			<filled mode="all"> <!-- http://cafe.bevocal.com/docs/vxml/if.html grammatik dtmf ?! -->
-				<if cond="allginfos=='Sekretariat' || allginfos=='dtmf-1'">
+<vxml xmlns="http://www.w3.org/2001/vxml"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://www.w3.org/2001/vxml http://www.w3.org/TR/voicexml21/vxml.xsd"
+	version="2.1" xml:lang="de-DE"
+	application = "root.vxml">
+	<!-- *********** ***************************************************************** -->
+		<!-- ****todo: audios einbinden, auf tasten reagieren (dtmf)********************* -->
+			<form id="menu">
 				
-					<goto next="#sekretariat"/>
-					
-					<elseif cond="allginfos=='Oeffnungszeiten'" />
-					
-						<goto next="thmOpeningTimesTopic.vxml"/>
-
-					<elseif cond="allginfos=='Vorlesungszeiten'" />
-									
-						<goto next="lectureTimesTopic.vxml"/>
-								
-					<elseif cond="allginfos=='Bibliothek'" />
-								
-						<goto next="libraryTimesTopic.vxml"/>
-								
-					<elseif cond="allginfos=='Mensa'" />
-								
-						<goto next="canteenTimesTopic.vxml"/>
-								
-					<elseif cond="allginfos=='Sport'" />
-								
-						<goto next="thmSports.vxml"/>
-				</if>
-			</filled>					
-		</field>
-			<noinput count="1">
-				Ich habe Sie nicht verstanden. Bitte sprechen sie etwas lauter.
-            <reprompt/>		
-            </noinput>
-			<noinput count="2">
-				Bitte wiederholen Sie Ihre Aussage. Ich habe nichts verstanden. 
-            <reprompt/>		
-            </noinput>
-	</form>
-				
-	<form id="sekretariat">
-		<field name="sekretariat">
-			<prompt>Sie werden in Kürze mit dem Sekretariat verbunden</prompt>
-		</field>
-	 </form>
-	 
-	 <form id="oeffnungszeiten">
-		<field name="oeffnungszeiten">
-			<prompt>Für welchen Standort möchten Sie die Oeffnungszeiten wissen?</prompt>
-			<grammar src="oeffnungszeiten.agl" />
-				<filled>
-					<prompt>Sie haben <value expr="oeffnungszeiten"/> gewählt.
+				<property name="confidencelevel" value="0.3" />
+				<field name="allginfos">
+					<grammar src="../Grammatik/allginfos.agl#Allginfos" type="application/x-nuance-gsl"/>
+					<prompt>
+						<audio src="../Dialogdesign/Audiofiles/menu_info_01.wav">
+							Bitte wählen Sie aus einem der folgenden Menüpunkte aus. 
+								<audio src="../Dialogdesign/Audiofiles/menu_info_02.wav">
+								Drücken Sie um direkt mit einem Mitarbeiter im Sekretariat verbunden zu werden. 
+								<audio src="../Dialogdesign/Audiofiles/menu_info_03.wav">
+								Drücken Sie [1] für Öffnungszeiten der THM
+							</audio>
+							
+							</audio>
+							
+							<audio src="../Dialogdesign/Audiofiles/menu_info_06.wav">
+							Drücken Sie [2] für Informationen zu Vorlesungszeiten
+							</audio>
+						
+						
+						</audio>
+						
+						
 					</prompt>
-					<if cond="oeffnungszeiten=='fb'">
-					<goto next="#fb" />
-					<elseif cond="oeffnungszeiten=='gi'" />
-					<goto next="#gi" />
-					<elseif cond="oeffnungszeiten=='wz'" />
-					<goto next="#wz" />
-					</if>
-				</filled>
-		</field>
-		</form>
+					<filled mode="all">
+						<!-- http://cafe.bevocal.com/docs/vxml/if.html grammatik dtmf ?! -->
+							<if cond="allginfos=='Sekretariat' ">
+								<goto next="#sekretariat"/>
+								<elseif cond="allginfos=='Oeffnungszeiten'" />
+								<goto next="thmOpeningTimesTopic.vxml"/>
+								<elseif cond="allginfos=='Vorlesungszeiten'" />
+								<goto next="lectureTimesTopic.vxml"/>
+								<elseif cond="allginfos=='Bibliothek'" />
+								<goto next="libraryTimesTopic.vxml"/>
+								<elseif cond="allginfos=='Mensa'" />
+								<goto next="canteenTimesTopic.vxml"/>
+								<elseif cond="allginfos=='Sport'" />
+								<goto next="thmSports.vxml"/>
+							</if>
+						</filled>
+					</field>
+					<noinput count="1">
+						Ich habe Sie nicht verstanden. Bitte sprechen sie etwas lauter. 
+						<reprompt/>
+					</noinput>
+					<noinput count="2">
+						Bitte wiederholen Sie Ihre Aussage. Ich habe nichts verstanden. 
+						<reprompt/>
+					</noinput>
+				</form>
+				<form id="sekretariat">
+					<field name="sekretariat">
+						<prompt>
+							Sie werden in Kürze mit dem Sekretariat verbunden 
+						</prompt>
+					</field>
+				</form>
+				<form id="oeffnungszeiten">
+					<field name="oeffnungszeiten">
+						<prompt>
+							Für welchen Standort möchten Sie die Oeffnungszeiten wissen? 
+						</prompt>
+						<grammar src="oeffnungszeiten.agl" />
+						<filled>
+							<prompt>
+								Sie haben 
+								<value expr="oeffnungszeiten"/>gewählt. 
+							</prompt>
+							<if cond="oeffnungszeiten=='fb'">
+								<goto next="#fb" />
+								<elseif cond="oeffnungszeiten=='gi'" />
+								<goto next="#gi" />
+								<elseif cond="oeffnungszeiten=='wz'" />
+								<goto next="#wz" />
+							</if>
+						</filled>
+					</field>
+				</form>
+				<form id="fb">
+					<field name="fb">
+						<prompt>
+							<audio src="../Dialogdesign/Audiofiles/menu_info_05_fb.wav">
+								Friedberg lauten Montag bis Freitag von 07.00 Uhr bis 20.30 Uhr, Samstag von 07.00 Uhr bis 13.00 Uhr 
+							</audio>
+						</prompt>
+					</field>
+				</form>
+				<form id="gi">
+					<field name="gi">
+						<prompt>
+							Die Oeffnungszeiten in Giessen sind: 
+						</prompt>
+					</field>
+				</form>
+				<form id="wz">
+					<field name="wz">
+						<prompt>
+							Die Oeffnungszeiten in Wetzlar sind: 
+						</prompt>
+					</field>
+				</form>
+				<form id="vorlesungszeiten">
+					<field name="vorlesungszeiten">
+						<prompt>
+							Zu welchem Semester und Jahr möchten Sie die Vorlesungszeiten wissen? 
+						</prompt>
+						<grammar src="vorlesungszeiten.agl" />
+						<filled>
+							<prompt>
+								Sie haben 
+								<value expr="vorlesungszeiten"/>gewählt. 
+							</prompt>
+						</filled>
+					</field>
+				</form>
+				<form id="bibliothek">
+					<field name="bibliothek">
+						<prompt>
+							Sie haben Bibliothek gewählt. 
+						</prompt>
+					</field>
+				</form>
+				<form id="mensa">
+					<field name="mensa">
+						<prompt>
+							Sie haben Mensa gewählt. 
+						</prompt>
+					</field>
+				</form>
+				<form id="kurs">
+					<field name="kurs" type="digits?length=6">
+						<prompt>
+							Geben Sie bitte ihre Matrikelnummer ein 
+						</prompt>
+						<filled>
+							<goto next="#kursnr"/>
+						</filled>
+					</field>
+				</form>
+				<form id="kursnr">
+					<field name="kursnr">
+						<prompt>
+							Informationen zu welchem Kurs hätten Sie genre? 
+						</prompt>
+						<grammar src="kursnr.agl">
+					</grammar>
+					<filled>
+						<prompt>
+							Sie haben 
+							<value expr="kursnr"/>gewählt. 
+						</prompt>
+					</filled>
+				</field>
+			</form>
 		
-		<form id="fb">
-		<field name="fb">
-		<prompt>Die Oeffnungszeiten in Friedberg sind:</prompt>
-		</field>
-		</form>
-		
-		<form id="gi">
-		<field name="gi">
-		<prompt>Die Oeffnungszeiten in Giessen sind:</prompt>
-		</field>
-		</form>
-		
-		<form id="wz">
-		<field name="wz">
-		<prompt>Die Oeffnungszeiten in Wetzlar sind:</prompt>
-		</field>
-	</form>
-	 
-	 <form id="vorlesungszeiten">
-	 <field name="vorlesungszeiten">
-		<prompt>Zu welchem Semester und Jahr möchten Sie die Vorlesungszeiten wissen?</prompt>
-		<grammar src="vorlesungszeiten.agl" />
-				<filled>
-					<prompt>Sie haben <value expr="vorlesungszeiten"/> gewählt.
-					</prompt>
-				</filled>
-	 </field>
-	 </form>
-	 
-	 <form id="bibliothek">
-	 <field name="bibliothek">
-		<prompt>Sie haben Bibliothek gewählt.
-		</prompt>
-	 </field>
-	 </form>
-	 
-	 <form id="mensa">
-	 <field name="mensa">
-		<prompt>Sie haben Mensa gewählt.</prompt>
-	 </field>
-	 </form>
-	 
-	 <form id="kurs">
-	 <field name="kurs" type="digits?length=6">
-	  <prompt>Geben Sie bitte ihre Matrikelnummer ein</prompt>
-		<filled>
-		<goto next="#kursnr"/>
-		</filled>
-	 </field>
-	 </form>
-	 
-	 <form id="kursnr">
-	 <field name="kursnr">
-	 <prompt>Informationen zu welchem Kurs hätten Sie genre?</prompt>
-	 <grammar src="kursnr.agl">
-	 </grammar>
-		 <filled>
-		 <prompt>Sie haben <value expr="kursnr"/> gewählt.</prompt>
-		 </filled>
-	 </field>
-	 </form>
-	 
-	 
-				<!--
-				<choice dtmf="2" next="#choice2">
-					Vorlesungszeiten 
-				</choice>
-				<choice dtmf="3" next="#choice3">
-					Öffnungszeiten der Bibliothek 
-				</choice>
-				<choice dtmf="4" next="#choice4">
-					Mensa Öffnungszeiten 
-				</choice>
-				<choice dtmf="5" next="#choice5">
-					Information zum THM Sport 
-				</choice>
-			
-			</menu>
-			<form id="choice1">
-				<block>
-					<prompt>
-						<audio src="... " /> THM Öffnungszeiten: 
-					</prompt>
-				
-				</block>
-			</form>
-			<form id="choice2">
-				<block>
-					<prompt>
-						<audio src="..." /> Vorlesungszeiten 
-					
-					</prompt>
-						<goto next="lectureTimesTopic.vxml"/>
-				</block>
-			</form>
-			<form id="choice3">
-				<block>
-					<prompt>
-						<audio src="..." />Bücherei Öffnungszeiten 
-					</prompt>
-					<goto next="libraryTimesTopic.vxml"/>
-				</block>
-			</form>
-			<form id="choice4">
-				<block>
-					<prompt>
-						<audio src="....wav" />Mensa Öffnungszeiten 
-					</prompt>
-					<goto next="canteenTimesTopic.vxml"/>
-					<disconnect/>
-				</block>
-			</form>
-			<form id="choice5">
-				<block>
-					<prompt>
-						<audio src="....wav" />THM Sport 
-					</prompt>
-					<goto next="thmSportsTopic.vxml"/>
-					<disconnect/>
-				</block>
-			</form>
-		-->
-		</vxml>
+	</vxml>
