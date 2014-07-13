@@ -24,12 +24,13 @@ version="2.1" xml:lang="de-DE">
 					<if cond="vorlesungszeiten=='ws14'">
 						<audio src="../Dialogdesign/Audiofiles/menu_info_09_ws.wav">
 								Wintersemester 2014/2015 vom 13. Oktober 2014 bis zum 30. Januar 2015
-					  </audio>	
+					  </audio>											
 					<elseif cond="vorlesungszeiten=='ss14'" />
 						<audio src="../Dialogdesign/Audiofiles/menu_info_09_ss.wav">
 								Sommersemester 2014 vom 07. April 2014 bis zum 25. Juli 2014.
 					  </audio>	
-					</if>	
+					</if>
+						<goto next="more_Info.vxml" />			
 					</filled>
 				</field>
 			</form>
