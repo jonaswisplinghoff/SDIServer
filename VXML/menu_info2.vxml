@@ -1,63 +1,85 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <vxml xmlns="http://www.w3.org/2001/vxml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3.org/2001/vxml http://www.w3.org/TR/voicexml21/vxml.xsd" version="2.1" xml:lang="de-DE" application = "root.vxml">
-	<form id="menu">
-		<grammar src= "../Grammatik/menu.agl#Auswahl" type="application/x-nuance-gsl"/>
-		<property name="confidence" value="0.2" />
-		<!--
-		<property bargein="False"/>-->
-			<field name="allginfos">
-				<prompt>
-					<audio src="../Dialogdesign/Audiofiles/menu_info_01.wav">
-						Bitte wählen Sie aus einem der folgenden Menüpunkte aus. Drücken Sie dazu die entsprechende Taste auf Ihrer Telefontastatur. 
-					</audio>
-					<audio src="../Dialogdesign/Audiofiles/menu_info_02.wav">
-						Drücken Sie [#] um direkt mit einem Mitarbeiter im Sekretariat verbunden zu werden. 
-					</audio>
-					<audio src="../Dialogdesign/Audiofiles/menu_info_03.wav">
-						Drücken Sie [1] für Öffnungszeiten der THM 
-					</audio>
-					<audio src="../Dialogdesign/Audiofiles/menu_info_06.wav">
-						Drücken Sie [2] für Informationen zu Vorlesungszeiten 
-					</audio>
-					<audio src="../Dialogdesign/Audiofiles/menu_info_10.wav">
-						Drücken Sie [3] für die Thekenzeiten der Hochschulbibliothek 
-					</audio>
-					<audio src="../Dialogdesign/Audiofiles/menu_info_12.wav">
-						Drücken Sie [4] für die Öffnungszeiten der Mensa 
-					</audio>
-					<audio src="../Dialogdesign/Audiofiles/menu_info_14.wav">
-						Drücken Sie [5] für Termininformationen zum Hochschulsport 
-					</audio>
-				</prompt>
-				<filled>
-					<prompt>
-						Sie haben 
-						<value expr="allginfos"/>gewählt. 
-					</prompt>
-				</filled>
-			</field>
-			<block> 
-				<if cond="allginfos=='Sekretariat'">
-					<prompt>
-						Sie werden mit dem Sekretariat verbunden
-					</prompt>
-					<elseif cond="menu=='allgemein'"/>
-					<prompt>
-						Sie werden nun weitergeleitet 
-					</prompt>
-					<goto expr = "allginfosVar" />
-					"next= "menu_info.vxml#menu""
-				</if> 
-				<!--<choice dtmf ="1" next = "choice1"> Sekretariat</choice>-->
-			</block>
-			<noinput count="1">
-				Bitte sprechen sie etwas lauter. 
-				<reprompt/>
-			</noinput>
-			<noinput count="2">
-				Mann, ich höre nichts! 
-				<reprompt/>
-			</noinput>
-		</form>
-		
-	</vxml>
+	<!-- ********************* V A R I A B L E N ************************************ -->
+		<var name = "openingTimes" expr = "'thmOpeningTimesTopic.vxml'"/>
+		<var name = "lectureTimes" expr = "'lectureTimesTopic.vxml'"/>
+		<var name = "libraryTimes" expr = "'libraryTimesTopic.vxml'"/>
+		<var name = "canteenTimes" expr = "'cantennTimesTopic.vxml'"/>
+		<var name = "sportInfo" expr = "'thmSports.vxml'"/>
+		<!-- *********************************************************************** -->
+			<form id="allginfos">
+				<grammar src= "../Grammatik/allginfos.agl#Allginfos" type="application/x-nuance-gsl"/>
+				<property name="confidence" value="0.2" />
+				<!-- 
+				<property bargein="False"/>-->
+					<field name="allginfos">
+						<prompt>
+						<!-- Abspielen der Audiofiles -->
+							<audio src="../Dialogdesign/Audiofiles/menu_info_01.wav">
+								Bitte wählen Sie aus einem der folgenden Menüpunkte aus. Drücken Sie dazu die entsprechende Taste auf Ihrer Telefontastatur. 
+							</audio>
+							<audio src="../Dialogdesign/Audiofiles/menu_info_02.wav">
+								Drücken Sie [#] um direkt mit einem Mitarbeiter im Sekretariat verbunden zu werden. 
+							</audio>
+							<audio src="../Dialogdesign/Audiofiles/menu_info_03.wav">
+								Drücken Sie [1] für Öffnungszeiten der THM 
+							</audio>
+							<audio src="../Dialogdesign/Audiofiles/menu_info_06.wav">
+								Drücken Sie [2] für Informationen zu Vorlesungszeiten 
+							</audio>
+							<audio src="../Dialogdesign/Audiofiles/menu_info_10.wav">
+								Drücken Sie [3] für die Thekenzeiten der Hochschulbibliothek 
+							</audio>
+							<audio src="../Dialogdesign/Audiofiles/menu_info_12.wav">
+								Drücken Sie [4] für die Öffnungszeiten der Mensa 
+							</audio>
+							<audio src="../Dialogdesign/Audiofiles/menu_info_14.wav">
+								Drücken Sie [5] für Termininformationen zum Hochschulsport 
+							</audio>
+							
+						</prompt>
+						
+						<!-- Erlaubt der Eingabe durch Telefontastatur. Bug: 1. "#" wird nicht erkannt - stattdessen erstmal mit Ziffer 0 arbeiten! 2. die Eingabe anderer Ziffern führt zum Programmabsturz! -->
+						<option dtmf = "0" value ="Sekretariat"> Sekretariat	</option>
+						<option dtmf = "1" value ="Oeffnungszeiten"> Oeffnungszeiten	</option>
+						<option dtmf = "2" value ="Vorlesungszeiten"> Vorlesungszeiten	</option>
+						<option dtmf = "3" value ="Bibliothek"> Bibliothek	</option>
+						<option dtmf = "4" value ="Mensa"> Mensa	</option>
+						<option dtmf = "5" value ="Sport"> Sport	</option>
+						<filled>
+							<prompt>
+								Sie haben 
+								<value expr="allginfos"/>gewählt. 
+							</prompt>
+						</filled>
+					</field>
+					<!-- Überprüfung der Eingabe -->
+					<block>
+						<if cond="allginfos=='Sekretariat'">
+							<prompt>
+								Sie werden mit dem Sekretariat verbunden 
+							</prompt>
+							<elseif cond="allginfos=='Oeffnungszeiten'"/>
+							<goto expr = "openingTimes" />
+							<elseif cond="allginfos=='Vorlesungszeiten'"/>
+							<goto expr = "lectureTimes" />
+							<elseif cond="allginfos=='Bibliothek'"/>
+							<goto expr = "libraryTimes" />
+							<elseif cond="allginfos=='Mensa'"/>
+							<goto expr = "cantennTimes" />
+							<elseif cond="allginfos=='Sport'"/>
+							<goto expr = "sportInfo" />
+						</if>
+				
+					</block>
+					<!-- Wiederholung bei keiner Eingabe -->
+					<noinput count="1">
+						Bitte sprechen sie etwas lauter. 
+						<reprompt/>
+					</noinput>
+					<noinput count="2">
+						Mann, ich höre nichts! 
+						<reprompt/>
+					</noinput>
+				</form>
+			</vxml>
