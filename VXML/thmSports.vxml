@@ -19,7 +19,7 @@ version="2.1" xml:lang="de-DE">
 			</prompt>
 		</field>
 		<block>
-			<goto next="moreInfo.vxml" />
+			<goto next="more_Info.vxml" />
 		</block>
 	</form>
 </vxml>
