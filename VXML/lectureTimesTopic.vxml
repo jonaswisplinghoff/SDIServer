@@ -5,41 +5,32 @@ xsi:schemaLocation="http://www.w3.org/2001/vxml http://www.w3.org/TR/voicexml21/
 version="2.1" xml:lang="de-DE">
 	<!-- **************************************************************************** -->
 		
-		
-			<form id="lectureMultislots">
+			<form id="vorlesungszeiten">
 				<field name="vorlesungszeiten">
-					<grammar src="../Grammatik/vorlesungszeiten.agl#Vorlesungszeiten" type="application/x-nuance-gsl"/>
+					<grammar src="../Grammatik/vorlesungszeiten.agl" type="application/x-nuance-gsl"/>
+					<!--<audio src="../Dialogdesign/Audiofiles/menu_info_07.wav">
+								Für welches Semester benötigen Sie die Vorlesungszeiten? Nennen Sie zunächst [Sommersemester] oder [Wintersemester]
+					</audio>-->				
+					<!--<audio src="../Dialogdesign/Audiofiles/menu_info_08.wav">
+								Nennen Sie jetzt bitte das Jahr.
+					</audio>-->		
 					<prompt>
-						Für welches Semester benötigen Sie die Vorlesungszeiten? Nennen Sie zunächst [Sommersemester] oder [Wintersemester]
+						Für welches Semester benötigen Sie die Vorlesungszeiten? Nennen Sie bitte das Semester und das Jahr.
 					</prompt>
-					<audio src="../Dialogdesign/Audiofiles/menu_info_07.wav" />
-					<filled mode="voice">
-					<if cond="vorlesungszeiten=='ws'">
-						<prompt>Wintersemester</prompt>
-						<elseif cond="vorlesungszeiten=='ss'">
-							<prompt>Sommersemester</prompt>
-						</elseif>
-					</if>
-					<promt>
-					Nennen Sie jetzt bitte das Jahr.
-					</promt>
-					<audio></audio>
+					<filled >
+						<audio src="../Dialogdesign/Audiofiles/menu_info_09.wav">
+								Die Vorlesungszeiten für das genannte Semester lauten
+					  </audio>
+					<if cond="vorlesungszeiten=='ws14'">
+						<audio src="../Dialogdesign/Audiofiles/menu_info_09_ws.wav">
+								Wintersemester 2014/2015 vom 13. Oktober 2014 bis zum 30. Januar 2015
+					  </audio>	
+					<elseif cond="vorlesungszeiten=='ss14'" />
+						<audio src="../Dialogdesign/Audiofiles/menu_info_09_ss.wav">
+								Sommersemester 2014 vom 07. April 2014 bis zum 25. Juli 2014.
+					  </audio>	
+					</if>	
+					</filled>
 				</field>
-				<block>
-					<goto next="moreInfo.vxml" />
-				</block>
 			</form>
 		</vxml>
-		
-		
-		
-		<!-- 
-		<filled>
-						<prompt>
-							Deine Wahl war
-							<value expr="lastresult$.utterance"/>.Semester Im 
-							<value expr="lastresult$.interpretation.semester"/>gelten folgende Vorlesungszeiten
-							<value expr="lastresult$.interpretation.vorlesungszeiten"/>.
-						</prompt>						
-					</filled>
-					-->
