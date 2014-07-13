@@ -5,23 +5,53 @@ xsi:schemaLocation="http://www.w3.org/2001/vxml http://www.w3.org/TR/voicexml21/
 version="2.1" xml:lang="de-DE">
 	<!-- **************************************************************************** -->
 		
-		
 			<form id="canteenMultislots">
-				<field name="CanteenTimes">
-					<grammar src="Grammar/canteenTimes.gsl#CANTEEN" type="application/x-nuance-gsl"/>
+				<block>
+				<!--
+					<grammar src= "../Grammatik/oeffnungszeiten.agl#Oeffnungszeiten" type="application/x-nuance-gsl"/>
 					<prompt>
 						Bitte, wähle ein THM Standort.
 					</prompt>
-					<filled >
-						<prompt>
-							Deine Wahl war
-							<!--<value expr="lastresult$.utterance"/>. Die Kantine in -->
-							<value expr =  "CanteenTimes.oeffnungszeiten"/> Die Kantine in
-							<value expr="lastresult$.interpretation.location"/>hat geöffnet
-							<value expr="lastresult$.interpretation.openingTimes"/>.
-						</prompt>
-						
+					<filled>
+					<assign name = "standort" expr = "oeffnungszeiten"/> 
+							<audio src="../Dialogdesign/Audiofiles/menu_info_05.wav">
+								Die Öffnungszeiten der THM am Standort
+							</audio>
+							
+							<if cond = "standort == 'fb'">
+								<audio src="../Dialogdesign/Audiofiles/menu_info_05_fb.wav">
+									Friedberg lauten Montag bis Freitag von 07.00 Uhr bis 20.30 Uhr, Samstag von 07.00 Uhr bis 13.00 Uhr
+								</audio>
+								<goto next="#moreInfo" />									
+							<elseif cond="standort == 'gi'" />
+								<audio src="../Dialogdesign/Audiofiles/menu_info_05_gi.wav">
+									Gießen lauten Montag bis Freitag von 06.00 Uhr bis 19.30 Uhr, Samstags bleiben die Gebäude geschlossen.
+								</audio>
+									<goto next="#moreInfo" />
+							<elseif cond="standort == 'wz'" />
+									<prompt>
+										Wetzlar
+									</prompt>
+										<goto next="#moreInfo" />
+							</if>
+							
 					</filled>
-				</field>
+					-->
+						<audio src="../Dialogdesign/Audiofiles/menu_info_13.wav">
+									Die Öffnungszeiten der Mensa lauten Montag bis Donnerstag von 7.30 Uhr bis 18 Uhr, Freitags bis 15 Uhr.
+						</audio>
+						
+			
+				
+						<goto next="#moreInfo" />
+						</block>
+			</form>
+			<form id="moreInfo">
+				
+					<block>
+					<goto next="more_Info.vxml" />	
+												
+					</block>
+					
 			</form>
 		</vxml>

@@ -46,12 +46,7 @@ application = "root.vxml">
 				
 					<block>
 					<goto next="more_Info.vxml" />	
-						<prompt>
-						Weitere Infos werden aufgerufen
-					</prompt>
-						
-							<goto next="moreInfo.vxml" />	
-						
+												
 					</block>
 					
 			</form>

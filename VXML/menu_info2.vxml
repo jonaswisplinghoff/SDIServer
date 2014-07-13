@@ -4,7 +4,7 @@
 		<var name = "openingTimes" expr = "'thmOpeningTimesTopic.vxml'"/>
 		<var name = "lectureTimes" expr = "'lectureTimesTopic.vxml'"/>
 		<var name = "libraryTimes" expr = "'libraryTimesTopic.vxml'"/>
-		<var name = "canteenTimes" expr = "'cantennTimesTopic.vxml'"/>
+		<var name = "canteenTimes" expr = "'canteenTimesTopic.vxml'"/>
 		<var name = "sportInfo" expr = "'thmSports.vxml'"/>
 		<!-- *********************************************************************** -->
 			<form id="allginfos">
@@ -66,7 +66,7 @@
 							<elseif cond="allginfos=='Bibliothek'"/>
 							<goto expr = "libraryTimes" />
 							<elseif cond="allginfos=='Mensa'"/>
-							<goto expr = "cantennTimes" />
+							<goto expr = "canteenTimes" />
 							<elseif cond="allginfos=='Sport'"/>
 							<goto expr = "sportInfo" />
 						</if>
