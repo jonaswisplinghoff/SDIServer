@@ -5,22 +5,12 @@ xsi:schemaLocation="http://www.w3.org/2001/vxml http://www.w3.org/TR/voicexml21/
 version="2.1" xml:lang="de-DE">
 	<!-- **************************************************************************** -->
 		
-		
-			<form id="libraryMultislots">
-				<field name="LibraryTimes">
-					<grammar src="Grammar/libraryTimes.gsl#LIBRARY" type="application/x-nuance-gsl"/>
-					<prompt>
-						Bitte, wähle ein THM Standort.
-					</prompt>
-					<filled>
-						<prompt>
-							Deine Wahl war
-							<value expr="lastresult$.utterance"/>. Die Bücherei in
-							<value expr="lastresult$.interpretation.location"/>hat geöffnet
-							<value expr="lastresult$.interpretation.openingTimes"/>.
-						</prompt>
-						
-					</filled>
-				</field>
+			<form id="libraryTimes">
+				<block>
+						<audio src="../Dialogdesign/Audiofiles/menu_info_11.wav">
+									Die Öffnungszeiten der Mensa lauten Montag bis Donnerstag von 7.30 Uhr bis 18 Uhr, Freitags bis 15 Uhr.
+						</audio>
+						<goto next="more_Info.vxml" />	
+						</block>
 			</form>
 		</vxml>
