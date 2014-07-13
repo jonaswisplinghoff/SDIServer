@@ -16,29 +16,43 @@ application = "root.vxml">
 						Bitte, w‰hle ein THM Standort.
 					</prompt>
 					<filled>
-					<assign name = "standort" expr = "oeffnungszeiten"></assign>
-						
+					<assign name = "standort" expr = "oeffnungszeiten"/> 
+							<audio src="../Dialogdesign/Audiofiles/menu_info_05.wav">
+								Die ÷ffnungszeiten der THM am Standort
+							</audio>
 							
 							<if cond = "standort == 'fb'">
-									<prompt>
-										Friedberg
-									</prompt>
-									
-									<elseif cond="standort == 'gi'" />
-									
-									<prompt>
-										Gieﬂen
-									</prompt>
-									
-									<elseif cond="standort == 'wz'" />
-									
+								<audio src="../Dialogdesign/Audiofiles/menu_info_05_fb.wav">
+									Friedberg lauten Montag bis Freitag von 07.00 Uhr bis 20.30 Uhr, Samstag von 07.00 Uhr bis 13.00 Uhr
+								</audio>
+								<goto next="#moreInfo" />									
+							<elseif cond="standort == 'gi'" />
+								<audio src="../Dialogdesign/Audiofiles/menu_info_05_gi.wav">
+									Gieﬂen lauten Montag bis Freitag von 06.00 Uhr bis 19.30 Uhr, Samstags bleiben die Geb‰ude geschlossen.
+								</audio>
+									<goto next="#moreInfo" />
+							<elseif cond="standort == 'wz'" />
 									<prompt>
 										Wetzlar
 									</prompt>
-									
+										<goto next="#moreInfo" />
 							</if>
 							
 					</filled>
 				</field>
+				
+			</form>
+			<form id="moreInfo">
+				
+					<block>
+					<goto next="more_Info.vxml" />	
+						<prompt>
+						Weitere Infos werden aufgerufen
+					</prompt>
+						
+							<goto next="moreInfo.vxml" />	
+						
+					</block>
+					
 			</form>
 		</vxml>
