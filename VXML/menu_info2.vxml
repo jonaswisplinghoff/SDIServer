@@ -10,6 +10,14 @@ application = "root.vxml">
 		<var name = "sportInfo" expr = "'thmSports.vxml'"/>
 		<!-- *********************************************************************** -->
 			<form id="allginfos">
+			<block>
+			<script>
+				var date= new Date();
+			</script>
+			<assign name="timestamp" expr="date.getFullYear() + '-' + (date.getMonth()+1) + '-' + date.getDate() + 'T' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds()" />		
+			<assign name="choice" expr="'allgemein'" />
+			<data name="menuChoice" src="http://localhost:8080/reports/menu" namelist="callId timestamp choice" />
+		</block>
 				<grammar src= "../Grammatik/allginfos.agl#Allginfos" type="application/x-nuance-gsl"/>
 				<property name="confidence" value="0.3" />
 				<!-- 
