@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<vxml xmlns="http://www.w3.org/2001/vxml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3.org/2001/vxml http://www.w3.org/TR/voicexml21/vxml.xsd" version="2.1" xml:lang="de-DE" application = "root.vxml">
+<vxml xmlns="http://www.w3.org/2001/vxml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://www.w3.org/2001/vxml http://www.w3.org/TR/voicexml21/vxml.xsd" version="2.1" xml:lang="de-DE"
+application = "root.vxml">
 	<!-- ********************* V A R I A B L E N ************************************ -->
 		<var name = "openingTimes" expr = "'thmOpeningTimesTopic.vxml'"/>
 		<var name = "lectureTimes" expr = "'lectureTimesTopic.vxml'"/>
@@ -17,7 +19,7 @@
 			<data name="menuChoice" src="http://localhost:8080/reports/menu" namelist="callId timestamp choice" />
 		</block>
 				<grammar src= "../Grammatik/allginfos.agl#Allginfos" type="application/x-nuance-gsl"/>
-				<property name="confidence" value="0.2" />
+				<property name="confidence" value="0.3" />
 				<!-- 
 				<property bargein="False"/>-->
 					<field name="allginfos">

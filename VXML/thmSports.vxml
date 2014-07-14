@@ -2,10 +2,10 @@
 <vxml xmlns="http://www.w3.org/2001/vxml"
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 xsi:schemaLocation="http://www.w3.org/2001/vxml http://www.w3.org/TR/voicexml21/vxml.xsd"
-version="2.1" xml:lang="de-DE">		
+version="2.1" xml:lang="de-DE" application="./root.vxml">		
 
 	<form id="thmSports">
-		<field name="sportStart">					
+		<block >					
 			<prompt> 
 				<audio src="../Dialogdesign/Audiofiles/menu_info_15.wav" >
 					Am 22. April 2014 starten die ersten Sportangebote des Sportprogramms für das Sommersemester 2014.
@@ -17,9 +17,18 @@ version="2.1" xml:lang="de-DE">
 					Die Sportkurse enden am 18. Juli 2014.
 				</audio>
 			</prompt>
-		</field>
-		<block>
-			<goto next="more_Info.vxml" />
+			
+				<goto next="#moreInfo" />
+			
 		</block>
+	
 	</form>
+		<form id="moreInfo">
+				
+					<block>
+					<goto next="more_Info.vxml" />	
+												
+					</block>
+					
+			</form>
 </vxml>

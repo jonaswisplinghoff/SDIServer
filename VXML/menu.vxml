@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <vxml xmlns="http://www.w3.org/2001/vxml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-xsi:schemaLocation="http://www.w3.org/2001/vxml http://www.w3.org/TR/voicexml21/vxml.xsd" version="2.1" xml:lang="de-DE" xml:base="." application="./root.vxml">
+xsi:schemaLocation="http://www.w3.org/2001/vxml http://www.w3.org/TR/voicexml21/vxml.xsd" version="2.1" xml:lang="de-DE"
+xml:base="." application="./root.vxml">
 
 <var name = "allginfosVar" expr = "'menu_info2.vxml'"/>
 	
@@ -8,7 +9,7 @@ xsi:schemaLocation="http://www.w3.org/2001/vxml http://www.w3.org/TR/voicexml21/
 	<property bargein="False"/>-->
 <form id="allginfos">
 	<grammar src= "../Grammatik/menu.agl#Auswahl" type="application/x-nuance-gsl"/>
-	<property name="confidence" value="0.2" />
+	<property name="confidence" value="0.8" />
 		<field name="menu">
 			<prompt>
 				<audio src="../Dialogdesign/Audiofiles/menu_01.wav">
