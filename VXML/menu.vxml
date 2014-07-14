@@ -13,13 +13,13 @@ xml:base="." application="./root.vxml">
 		<field name="menu">
 			<prompt>
 				<audio src="../Dialogdesign/Audiofiles/menu_01.wav">
-					Für allgemeine Informationen sagen Sie bitte INFOS. Um kurspezifische Informationen zu erhalten sagen Sie bitte KURS. 
+					Fï¿½r allgemeine Informationen sagen Sie bitte INFOS. Um kurspezifische Informationen zu erhalten sagen Sie bitte KURS. 
 				</audio>
 			</prompt>
 			<filled>
 				<prompt>
 					Sie haben
-					<value expr="menu"/>gewählt. 
+					<value expr="menu"/>gewï¿½hlt. 
 				</prompt>
 			
 			</filled>
@@ -35,14 +35,6 @@ xml:base="." application="./root.vxml">
 				<!-- "next= "menu_info.vxml#menu"" -->
 			</if>
 		</block>
-		<noinput count="1">
-			Bitte sprechen sie etwas lauter. 
-			<reprompt/>
-		</noinput>
-		<noinput count="2">
-			Mann, ich höre nichts! 
-			<reprompt/>
-		</noinput>
 	</form>
 	<form>
 </form>
