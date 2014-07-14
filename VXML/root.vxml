@@ -8,4 +8,28 @@ version="2.1" xml:lang="de-DE">
 	<var name="gName" />
 	<var name="standort" />
 	
+	<noinput count="1">
+			<audio src="../Dialogdesign/Audiofiles/globals_01.wav">
+				Ich habe Sie leider nicht verstanden.
+			</audio>
+			<reprompt/>
+	</noinput>
+	<noinput count="2">
+			<audio src="../Dialogdesign/Audiofiles/globals_02.wav">
+				Ich habe Sie leider immer noch nicht verstanden. Bitte sprechen Sie etwas lauter.
+			</audio>
+			<reprompt/>
+	</noinput>
+	<nomatch count="1">
+			<audio src="../Dialogdesign/Audiofiles/globals_06.wav">
+				Wie war das?
+			</audio>
+			<reprompt/>
+	</nomatch>
+	<nomatch count="2">
+			<audio src="../Dialogdesign/Audiofiles/globals_07.wav">
+				Ich habe Sie leider nicht verstanden. Was haben Sie gesagt?
+			</audio>
+			<reprompt/>
+	</nomatch>
 </vxml>
