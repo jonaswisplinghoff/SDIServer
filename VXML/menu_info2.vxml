@@ -9,7 +9,7 @@
 		<!-- *********************************************************************** -->
 			<form id="allginfos">
 				<grammar src= "../Grammatik/allginfos.agl#Allginfos" type="application/x-nuance-gsl"/>
-				<property name="confidence" value="0.2" />
+				<property name="confidence" value="0.3" />
 				<!-- 
 				<property bargein="False"/>-->
 					<field name="allginfos">

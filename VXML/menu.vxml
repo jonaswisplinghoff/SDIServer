@@ -8,7 +8,7 @@ xsi:schemaLocation="http://www.w3.org/2001/vxml http://www.w3.org/TR/voicexml21/
 	<property bargein="False"/>-->
 <form id="allginfos">
 	<grammar src= "../Grammatik/menu.agl#Auswahl" type="application/x-nuance-gsl"/>
-	<property name="confidence" value="0.2" />
+	<property name="confidence" value="0.8" />
 		<field name="menu">
 			<prompt>
 				<audio src="../Dialogdesign/Audiofiles/menu_01.wav">
