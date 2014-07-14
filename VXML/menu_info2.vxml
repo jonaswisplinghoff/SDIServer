@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<vxml xmlns="http://www.w3.org/2001/vxml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3.org/2001/vxml http://www.w3.org/TR/voicexml21/vxml.xsd" version="2.1" xml:lang="de-DE" application = "root.vxml">
+<vxml xmlns="http://www.w3.org/2001/vxml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://www.w3.org/2001/vxml http://www.w3.org/TR/voicexml21/vxml.xsd" version="2.1" xml:lang="de-DE"
+application = "root.vxml">
 	<!-- ********************* V A R I A B L E N ************************************ -->
 		<var name = "openingTimes" expr = "'thmOpeningTimesTopic.vxml'"/>
 		<var name = "lectureTimes" expr = "'lectureTimesTopic.vxml'"/>
