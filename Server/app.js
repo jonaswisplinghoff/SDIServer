@@ -43,7 +43,7 @@ var Course = db.define('course', {
 
 var Log = db.define('log', {
 	id		: {type: "serial", key: true},
-	callId	: { type: "number"},
+	callId	: { type: "text"},
 	timestamp: { type: "date", time: true },
 	event: { type: "enum", values: [ "start", "menu", "end" ] },
 	choice: String,
@@ -99,6 +99,11 @@ app.get('/', function(req, res) {
 			call.callId = data.callId;
 							
 			Log.find({callId: call.callId, event : "start"}, 1, function (err, logs){
+				if (err) {
+					console.log("Something is wrong with the connection", err);
+					return;
+				}
+			
 				if(logs.length !=0){
 					call.start = logs[0].timestamp;
 					call.ani = logs[0].ani;
@@ -109,6 +114,12 @@ app.get('/', function(req, res) {
 				}
 
 				Student.find({ani: call.ani},1, function (err, student) {
+				
+					if (err) {
+						console.log("Something is wrong with the connection", err);
+						return;
+					}
+				
 					if(student.length !=0){
 						call.matrikelnummer = student[0].getMatrikelnummer();
 						call.name = student[0].getFullName();
@@ -119,6 +130,12 @@ app.get('/', function(req, res) {
 					}
 				
 					Log.find({callId: call.callId, event : "end"}, 1, function (err, logs){
+					
+						if (err) {
+							console.log("Something is wrong with the connection", err);
+							return;
+						}
+					
 						if(logs.length != 0){
 							call.end = logs[0].timestamp;
 						}
@@ -127,6 +144,12 @@ app.get('/', function(req, res) {
 						}
 						
 						Log.find({callId: call.callId, event : "menu"}, {}, function (err, logs){
+						
+						if (err) {
+							console.log("Something is wrong with the connection", err);
+							return;
+						}
+						
 							menus = [];
 							for(var j=0; j<logs.length; j++){
 								var choice = {};
