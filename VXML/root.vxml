@@ -7,7 +7,15 @@ version="2.1" xml:lang="de-DE">
 	<var name="callId" />
 	<var name="gName" />
 	<var name="standort" />
-	
+	<help>
+		<audio src="../Dialogdesign/Audiofiles/globals_02.wav">
+			Hilfe von der Wurzel kommt gleich.
+			Sie benötigen Hilfe? Kein Problem.
+			Über dieses Informationssystem der THM können Sie allgemeine und kursspezifische Informationen abrufen.
+			Dazu müssen Sie eine Auswahl treffen: Für allgemeine Informationen sagen Sie INFOS, für kursspezifische Informationen bitte KURS.
+		</audio>
+    <reprompt/>
+  </help>
 	<noinput count="1">
 			<audio src="../Dialogdesign/Audiofiles/globals_01.wav">
 				Ich habe Sie leider nicht verstanden.
@@ -32,4 +40,5 @@ version="2.1" xml:lang="de-DE">
 			</audio>
 			<reprompt/>
 	</nomatch>
+		
 </vxml>
