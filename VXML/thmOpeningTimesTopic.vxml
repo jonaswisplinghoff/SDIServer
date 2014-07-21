@@ -12,11 +12,12 @@ application = "root.vxml">
 			<form id="timeMultislots">
 				<field name="oeffnungszeiten">
 					<grammar src= "../Grammatik/oeffnungszeiten.agl#Oeffnungszeiten" type="application/x-nuance-gsl"/>
-					<prompt>
-						Bitte, wähle ein THM Standort.
-					</prompt>
+					<audio src="../Dialogdesign/Audiofiles/menu_info_04.wav">
+								Für welchen Standort der THM benötigen Sie die Öffnungszeiten?
+							</audio>
 					<filled>
 					<assign name = "standort" expr = "oeffnungszeiten"/> 
+							
 							<audio src="../Dialogdesign/Audiofiles/menu_info_05.wav">
 								Die Öffnungszeiten der THM am Standort
 							</audio>
